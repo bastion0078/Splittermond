@@ -25,5 +25,5 @@ jobs:
         run: node ./.github/scripts/publish_to_foundry.mjs
         env:
           AUTH_TOKEN: ${{secrets.FOUNDRY_VTT_PUBLISH_TOKEN}}
-          SYSTEM_JSON_PATH: './dist/system.json'
+          SYSTEM_JSON_PATH: './public/system.json'
           DRY_RUN: ${{github.event.inputs.dryRun}}
