@@ -4,6 +4,7 @@ import {SinonSandbox} from "sinon";
 import {AgentReference} from "../../../../../module/data/references/AgentReference";
 import {Cost} from "../../../../../module/util/costs/Cost";
 import SplittermondActor from "../../../../../module/actor/actor";
+import {injectParent} from "../../../testUtils";
 
 export function createDamageImplement(damage: number, baseReductionOverride: number, damageType: DamageType = "physical") {
     return new DamageImplement({
@@ -20,7 +21,7 @@ type EventProps = Partial<ConstructorParameters<typeof DamageEvent>[0]>;
 export function createDamageEvent(sandbox: SinonSandbox, eventProps:EventProps={}){
     const agent = eventProps.causer ??createStubActor(sandbox);
     const damageImplements = eventProps.implements ?? [createDamageImplement(1, 0)];
-    return new DamageEvent({
+    const event = new DamageEvent({
         causer: agent,
         _costBase: eventProps._costBase ??  new Cost(1, 0, false).asPrimaryCost(),
         formula: eventProps.formula ?? damageImplements.map(imp => imp.formula).join(" + "),
@@ -28,6 +29,8 @@ export function createDamageEvent(sandbox: SinonSandbox, eventProps:EventProps={
         isGrazingHit: eventProps.isGrazingHit ?? false,
         implements: damageImplements,
     });
+    injectParent(event);
+    return event;
 }
 
 function createStubActor(sandbox: SinonSandbox){
