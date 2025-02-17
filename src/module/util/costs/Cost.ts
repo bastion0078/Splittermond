@@ -106,6 +106,13 @@ export class CostModifier extends SplittermondDataModel<CostModifierType> {
     }
 
     /**
+     * Returns th L2 norm of this cost vector
+     */
+    get length(){
+        return Math.sqrt(this._exhausted**2 + this._channeled**2 + this._channeledConsumed**2 + this._consumed**2);
+    }
+
+    /**
      * Consumed portion of a modifier can only be evaluated relative to a primary cost,
      * because knowledge about whether the primary cost is channeled or not is required
      */

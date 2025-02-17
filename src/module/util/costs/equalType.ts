@@ -9,7 +9,7 @@ export function isSameCostType(cost1:PrimaryCost|CostModifier, cost2:PrimaryCost
 }
 
 function similarityCostModifier(cost1: CostModifier, cost2: CostModifier): number{
-    const normalization= length(cost1) * length(cost2);
+    const normalization= cost1.length * cost2.length;
     if(normalization == 0){ return 0;} //happens if we build a product with the null vector
     return (cost1._exhausted * cost2._exhausted +
         cost1._channeled * cost2._channeled +
@@ -17,6 +17,4 @@ function similarityCostModifier(cost1: CostModifier, cost2: CostModifier): numbe
         cost1._consumed * cost2._consumed)/normalization;
 }
 
-function length(cost: CostModifier){
-    return Math.sqrt(cost._exhausted**2 + cost._channeled**2 + cost._channeledConsumed**2 + cost._consumed**2);
-}
+
