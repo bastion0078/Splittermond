@@ -60,8 +60,6 @@ export class Cost {
     }
 }
 
-export const ZERO_COST = new Cost(0, 0, false, false);
-
 function CostModifierSchema() {
     return {
         _channeled: new fields.NumberField({required: true, nullable: false}),

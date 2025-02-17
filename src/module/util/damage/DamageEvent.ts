@@ -60,7 +60,7 @@ export class DamageImplement extends SplittermondDataModel<DamageImplementType, 
         return Math.min(this.damage, this._baseReductionOverride);
     }
 
-    bruttoHealthCost(): CostModifier {
-        return this.parent?.costVector.multiply(this.damage) ?? ZERO_COST.asModifier();
+    get bruttoHealthCost(): CostModifier {
+        return this.parent?.costVector.multiply(this.damage) ?? new Cost(0,0,false).asModifier();
     }
 }
