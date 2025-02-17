@@ -139,6 +139,7 @@ describe("Damage Application", () => {
 
             const record = recorder.lastCall.firstArg as DamageRecord;
             expect(record.damageReduction).to.equal(8);
+            expect(record.ignoredReduction).to.equal(6);
             expect(record.totalDamage).to.equal(6);
         });
 

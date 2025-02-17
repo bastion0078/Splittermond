@@ -1,5 +1,5 @@
 import SplittermondActor from "../../actor/actor";
-import {DamageEvent} from "./DamageEvent";
+import {DamageEvent, DamageImplement} from "./DamageEvent";
 import {DamageType} from "../../config/damageTypes";
 import {CostModifier} from "../costs/Cost";
 
@@ -13,6 +13,37 @@ interface DamageRecord {
     readonly totalDamage: number;
 }
 
+class DamageRecordImpl implements DamageRecord {
+    public items: RecordItem[] = [];
+    public isGrazingHit: boolean = false;
+    public damageReduction: number = 0;
+    public ignoredReduction: number = 0;
+    public totalBeforeGrazing: number = 0;
+
+    public get totalDamage(): number {
+        return Math.round(this.totalBeforeGrazing * (this.isGrazingHit ? 0.5 : 1) - this.damageReduction + this.ignoredReduction);
+    }
+
+    public setIgnoredReduction(value: CostModifier) {
+        this.ignoredReduction = Math.round(value.length);
+    }
+
+    public setTotalBeforeGrazing(value: CostModifier) {
+        this.totalBeforeGrazing = Math.round(value.length);
+    }
+
+    public addRecord(item: DamageImplement, susceptibility: number) {
+        const recordItem: RecordItem = {
+            name: item.implementName,
+            type: item.damageType,
+            baseValue: item.damage,
+            modifiedBy: susceptibility,
+            subTotal: item.damage + susceptibility
+        }
+        this.items.push(recordItem);
+    }
+}
+
 interface RecordItem {
     name: string
     type: DamageType;
@@ -21,56 +52,48 @@ interface RecordItem {
     subTotal: number;
 }
 
-type UserModifier = (x:DamageRecord)=>Promise<number>;
-const noUserModification:UserModifier = async ()=>0;
+type UserModifier = (x: DamageRecord) => Promise<number>;
+const noUserModification: UserModifier = async () => 0;
 
-export async function applyDamage(event: DamageEvent, target: SplittermondActor, userModification=noUserModification) {
+export async function applyDamage(event: DamageEvent, target: SplittermondActor, userModification = noUserModification) {
 
-    const damageRecord: DamageRecord = {
-        isGrazingHit: event.isGrazingHit,
-        items: [],
-        damageReduction: target.damageReduction,
-        ignoredReduction: 0,
-        totalBeforeGrazing:0,
-        get totalDamage() {
-            return Math.round(this.totalBeforeGrazing * (this.isGrazingHit ? 0.5 : 1) - this.damageReduction + this.ignoredReduction);
-        },
+    function toCost(value: number) {
+        return event.costVector.multiply(value)
     }
 
-    let damageBeforeGrazingAndReduction = event.costBase.toModifier();
-    let realizedDamageReductionOverride = event.costBase.toModifier();
+    const damageRecord = new DamageRecordImpl();
+    damageRecord.isGrazingHit = event.isGrazingHit;
+    damageRecord.damageReduction = target.damageReduction;
+
+    let damageBeforeGrazingAndReduction = event.costBase.toModifier(true);
+    let realizedDamageReductionOverride = event.costBase.toModifier(true);
 
 
     for (const implement of event.implements) {
         const susceptibility = target.susceptibilities[implement.damageType];
-        const recordItem: RecordItem = {
-            name: implement.implementName,
-            type: implement.damageType,
-            baseValue: implement.damage,
-            modifiedBy: susceptibility,
-            subTotal: implement.damage + susceptibility
-        }
-        damageRecord.items.push(recordItem);
-        damageRecord.ignoredReduction += implement.ignoredReduction;
-        damageRecord.totalBeforeGrazing += recordItem.subTotal;
-
+        damageRecord.addRecord(implement, susceptibility);
         realizedDamageReductionOverride = realizedDamageReductionOverride.add(implement.ignoredReductionCost);
-        damageBeforeGrazingAndReduction = damageBeforeGrazingAndReduction.add(implement.bruttoHealthCost.add(event.costVector.multiply(susceptibility)));
+        damageBeforeGrazingAndReduction = damageBeforeGrazingAndReduction.add(implement.bruttoHealthCost.add(toCost(susceptibility)));
     }
+    damageRecord.setTotalBeforeGrazing(damageBeforeGrazingAndReduction);
+    damageRecord.setIgnoredReduction(realizedDamageReductionOverride);
 
     const damageBeforeReduction = damageBeforeGrazingAndReduction.multiply(event.isGrazingHit ? 0.5 : 1);
     const remainingReduction = calculateActualDamageReduction(event, target, realizedDamageReductionOverride);
     const totalDamage = damageBeforeReduction.subtract(remainingReduction);
 
-    const costModificationByUser= await userModification(damageRecord).then(x => event.costVector.multiply(x));
-    const finalDamage = event.costBase.add(totalDamage).add(costModificationByUser);
-    target.consumeCost("health", finalDamage.render(), "")
-    console.log(`${event.causer?.getAgent().name} dealt ${finalDamage.render()} damage to ${target.name}`);
+    const damageAdjustment = await userModification(damageRecord).then(toCost);
+    const userAdjustedDamage = event.costBase.add(totalDamage).add(damageAdjustment);
+    target.consumeCost("health", userAdjustedDamage.render(), "")
+    console.log(`${event.causer?.getAgent().name} dealt ${userAdjustedDamage.render()} damage to ${target.name}`);
     console.debug(`Detailed Damage report: ${damageRecord.items.map(item => `${item.name}(${item.type}): ${item.baseValue} + ${item.modifiedBy} = ${item.subTotal}`).join(", ")}`);
 }
 
 function calculateActualDamageReduction(event: DamageEvent, target: SplittermondActor, realizedDamageReductionOverride: CostModifier) {
+    //Base reduction must be be a primary cost, because it must not go below 0. However, we need to convert it to a modifier to apply the damage reduction
+    //Therefore, we need to apply the cost type both via cost base and cost vector;
     const baseReduction = event.costBase.add(event.costVector.multiply(target.damageReduction));
     return baseReduction.subtract(realizedDamageReductionOverride).toModifier(true);
 }
+
 
