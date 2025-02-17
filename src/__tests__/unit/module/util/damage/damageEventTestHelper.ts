@@ -16,18 +16,24 @@ export function createDamageImplement(damage: number, baseReductionOverride: num
     });
 }
 
-export function createDamageEvent(sandbox: SinonSandbox, damageImplements: DamageImplement[]) {
+type EventProps = Partial<ConstructorParameters<typeof DamageEvent>[0]>;
+export function createDamageEvent(sandbox: SinonSandbox, eventProps:EventProps={}){
+    const agent = eventProps.causer ??createStubActor(sandbox);
+    const damageImplements = eventProps.implements ?? [createDamageImplement(1, 0)];
+    return new DamageEvent({
+        causer: agent,
+        _costBase: eventProps._costBase ??  new Cost(1, 0, false).asPrimaryCost(),
+        formula: eventProps.formula ?? damageImplements.map(imp => imp.formula).join(" + "),
+        tooltip: eventProps.tooltip ?? "",
+        isGrazingHit: eventProps.isGrazingHit ?? false,
+        implements: damageImplements,
+    });
+}
+
+function createStubActor(sandbox: SinonSandbox){
     const actor = sandbox.createStubInstance(SplittermondActor);
     actor.name = "TestActor";
     const agent = sandbox.createStubInstance(AgentReference);
     agent.getAgent.returns(actor);
-
-    return new DamageEvent({
-        causer: agent,
-        costVector: new Cost(1, 0, false).asModifier(),
-        formula: damageImplements.map(imp => imp.formula).join(" + "),
-        tooltip: "",
-        isGrazingHit: false,
-        implements: damageImplements,
-    });
+    return agent;
 }

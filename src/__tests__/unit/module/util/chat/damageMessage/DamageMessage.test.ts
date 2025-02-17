@@ -15,7 +15,7 @@ describe("Damage Message", () => {
     afterEach(() => sandbox.restore());
 
     it("should display at most 4 features", () => {
-        const damageEvent = createDamageEvent(sandbox, [createDamageImplement(5, 0)]);
+        const damageEvent = createDamageEvent(sandbox, {implements:[createDamageImplement(5, 0)]});
         const features = [
             createFeature("lange waffe",0),
             createFeature("kritisch",2),
@@ -30,8 +30,8 @@ describe("Damage Message", () => {
     });
 
     it("should hand damage over to the damage handler", () => {
-        const damageEvent = createDamageEvent(sandbox, [])
-        const damageMessage = DamageMessage.initialize(damageEvent, []);
+        const damageEvent = createDamageEvent(sandbox)
+        const damageMessage = DamageMessage.initialize(damageEvent);
 
         const damageDialog = sandbox.stub(ApplyDamageDialog, 'create').returns(Promise.resolve());
 
@@ -43,9 +43,9 @@ describe("Damage Message", () => {
     it("should return the principle damage component", () => {
         const principalDamageComponent = createDamageImplement(8, 0);
         principalDamageComponent.updateSource({implementName: "Brennende Klinge"});
-        const damageEvent = createDamageEvent(sandbox, [
+        const damageEvent = createDamageEvent(sandbox, {implements:[
             createDamageImplement(5, 0), principalDamageComponent, createDamageImplement(3, 0)
-        ]);
+        ]});
         const damageMessage = DamageMessage.initialize(damageEvent, []);
 
         expect(damageMessage.getData().source).to.equal(principalDamageComponent.implementName);
