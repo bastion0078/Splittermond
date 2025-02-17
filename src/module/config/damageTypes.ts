@@ -8,6 +8,8 @@ export const damageTypes = [
     "heat",
     "cold",
     "poison",
+    "light",
+    "shadow",
     "bleeding",
     "disease"
 ] as const;

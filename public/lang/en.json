@@ -36,7 +36,9 @@
         "cold": "cold",
         "poison": "poison",
         "bleeding": "bleed",
-        "disease": "disease"
+        "disease": "disease",
+        "light": "light",
+        "shadow": "shadow"
       },
       "long": {
         "physical": "pyhsical damage",
@@ -49,7 +51,9 @@
         "cold": "cold damage",
         "poison": "poison damage",
         "bleeding": "bleeding damage",
-        "disease": "disease damage"
+        "disease": "disease damage",
+        "light": "light damage",
+        "shadow": "shadow damage"
       }
     }
   }

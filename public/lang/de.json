@@ -366,7 +366,9 @@
         "cold": "Kälte",
         "poison": "Gift",
         "bleeding": "Blutung",
-        "disease": "Krankheit"
+        "disease": "Krankheit",
+        "light": "Licht",
+        "shadow": "Schatten"
       },
       "long": {
         "physical": "Physischer Schaden",
@@ -379,7 +381,9 @@
         "cold": "Kältenschaden",
         "poison": "Giftschaden",
         "bleeding": "Blutungsschaden",
-        "disease": "Krankheitsschaden"
+        "disease": "Krankheitsschaden",
+        "light": "Lichtschaden",
+        "shadow": "Schattenschaden"
       }
     },
     "skillAbbreviation": {
