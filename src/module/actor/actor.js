@@ -27,7 +27,7 @@ export function calculateHeroLevels() {
 
 
 settings.registerNumber("HGMultiplier", {
-    position:1,
+    position: 1,
     scope: "world",
     config: true,
     default: 1.0,
@@ -48,6 +48,21 @@ settings.registerNumber("HGMultiplier", {
 }).then(accessor => getHeroLevelMultiplier = accessor.get)
 
 export default class SplittermondActor extends Actor {
+
+    /**@type {Record<DamageType, number>} */
+    _susceptibilities = {
+        physical: 0,
+        mental: 0,
+        electric: 0,
+        acid: 0,
+        rock: 0,
+        fire: 0,
+        heat: 0,
+        cold: 0,
+        poison: 0,
+        bleeding: 0,
+        disease: 0
+    };
 
     actorData() {
         return this.system;
@@ -578,13 +593,22 @@ export default class SplittermondActor extends Actor {
         return this.modifier.value("damagereduction");
     }
 
-    async importFromJSON(json,updateActor) {
+    /**
+     * @return {Record<DamageType, number>} The actor's suceptibility for each damage type. Positive values indicate a weakness,
+     * negative values indicate a resistance.
+     */
+    get susceptibilities() {
+        return this._susceptibilities;
+    }
+
+
+    async importFromJSON(json, updateActor) {
         const data = JSON.parse(json);
 
         // If Genesis-JSON-Export
         if (data.jsonExporterVersion && data.system === "SPLITTERMOND") {
             updateActor = updateActor ?? await askUserAboutActorOverwrite();
-            const importedGenesisData = await this.#importGenesisData(data,updateActor);
+            const importedGenesisData = await this.#importGenesisData(data, updateActor);
             json = JSON.stringify(importedGenesisData);
         }
 
@@ -884,7 +908,6 @@ export default class SplittermondActor extends Actor {
             newData.system.currency.L = Math.floor(genesisData.telare / 100) - newData.system.currency.S * 100;
             newData.system.currency.T = Math.floor(genesisData.telare) - newData.system.currency.L * 100 - newData.system.currency.S * 10000;
         }
-
 
 
         if (updateActor) {
@@ -1419,7 +1442,7 @@ export default class SplittermondActor extends Actor {
 /**
  * @returns {Promise<boolean>}
  */
-async function askUserAboutActorOverwrite(){
+async function askUserAboutActorOverwrite() {
     return new Promise((resolve) => {
         let dialog = new Dialog({
             title: "Import",

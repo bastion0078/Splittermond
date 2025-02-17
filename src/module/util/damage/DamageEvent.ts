@@ -2,7 +2,9 @@ import {DataModelSchemaType, fields, SplittermondDataModel} from "../../data/Spl
 import {AgentReference} from "../../data/references/AgentReference";
 import type {DamageType} from "../../config/damageTypes";
 import {splittermond} from "../../config";
-import {CostModifier, ZERO_COST} from "../costs/Cost";
+import {Cost, CostModifier} from "../costs/Cost";
+import {PrimaryCost} from "../costs/PrimaryCost";
+import {DataModelConstructorInput} from "../../api/DataModel";
 
 
 function DamageEventSchema() {
@@ -10,7 +12,7 @@ function DamageEventSchema() {
         causer: new fields.EmbeddedDataField(AgentReference, {required: true, nullable: true}),
         formula: new fields.StringField({required: true, nullable: false}),
         tooltip: new fields.StringField({required: true, nullable: false}),
-        costVector: new fields.EmbeddedDataField(CostModifier, {required: true, nullable: false}),
+        _costBase: new fields.EmbeddedDataField(PrimaryCost, {required: true, nullable: false}),
         isGrazingHit: new fields.BooleanField({required: true, nullable: false, initial:false}),
         implements: new fields.ArrayField(
             new fields.EmbeddedDataField(DamageImplement, {required: true, nullable: false}),
@@ -18,16 +20,31 @@ function DamageEventSchema() {
     };
 }
 
-export type DamageEventType = DataModelSchemaType<typeof DamageEventSchema>;
+export type DamageEventType = Omit<DataModelSchemaType<typeof DamageEventSchema>,"_costBase">;
+type DamageEventInput = DataModelConstructorInput<DamageEventType> & {_costBase: PrimaryCost};
 
 
 export class DamageEvent extends SplittermondDataModel<DamageEventType> {
+    /**
+     * A vector of length 1 representing the cost type (channled, exausted, consumed) of the damage event
+     */
+    declare private _costBase: PrimaryCost;
+
+    constructor(data: DamageEventInput, options?:object) {
+        super(data,options);
+    }
 
     static defineSchema = DamageEventSchema;
 
     totalDamage() {
         const accumulated = this.implements.reduce((acc, implement) => acc + implement.damage, 0);
         return Math.floor(accumulated * (this.isGrazingHit ? 0.5 : 1));
+    }
+    get costVector(){
+        return this._costBase.toModifier(true);
+    }
+    get costBase(){
+        return this._costBase.subtract(this._costBase.toModifier(true))
     }
 }
 
@@ -62,5 +79,8 @@ export class DamageImplement extends SplittermondDataModel<DamageImplementType, 
 
     get bruttoHealthCost(): CostModifier {
         return this.parent?.costVector.multiply(this.damage) ?? new Cost(0,0,false).asModifier();
+    }
+    get ignoredReductionCost(): CostModifier {
+        return this.parent?.costVector.multiply(this.ignoredReduction) ?? new Cost(0,0,false).asModifier();
     }
 }

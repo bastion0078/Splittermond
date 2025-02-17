@@ -2,7 +2,6 @@ import {describe} from "mocha";
 import sinon, {SinonSandbox} from "sinon";
 import {expect} from "chai";
 import {createDamageEvent, createDamageImplement} from "./damageEventTestHelper";
-import {DamageEvent} from "../../../../../module/util/damage/DamageEvent";
 import {Cost} from "../../../../../module/util/costs/Cost";
 
 
@@ -31,6 +30,32 @@ describe("DamageEvent", ()=> {
 
     it("should cap damage reduction override to damage", () => {
         expect(createDamageImplement(4, 5).ignoredReduction).to.equal(4);
+    });
+
+    describe("base cost", () => {
+        it("should return a zero cost base of type channeled",() => {
+            const damageEvent = createDamageEvent(sandbox, {_costBase: new Cost(1, 0, true,true).asPrimaryCost()});
+            const damage = damageEvent.costBase.add(new Cost(1,0,true,true).asModifier())
+            expect(damage.render()).to.equal("K1");
+        });
+
+        it("should return a zero cost base of type exhausted",() => {
+            const damageEvent = createDamageEvent(sandbox, {_costBase: new Cost(1, 0, false,true).asPrimaryCost()});
+            const damage = damageEvent.costBase.add(new Cost(1,0,false,true).asModifier())
+            expect(damage.render()).to.equal("1");
+        });
+
+        it("should return a zero cost base of type consumed",() => {
+            const damageEvent = createDamageEvent(sandbox, {_costBase: new Cost(0, 1, false,true).asPrimaryCost()});
+            const damage = damageEvent.costBase.add(new Cost(0,1,false,true).asModifier())
+            expect(damage.render()).to.equal("1V1");
+        });
+
+        it("should even work with mixed costs", () => {
+            const damageEvent = createDamageEvent(sandbox, {_costBase: new Cost(1, 1, false,true).asPrimaryCost()});
+            const damage = damageEvent.costBase.add(new Cost(1,1,false,true).asModifier())
+            expect(damage.render()).to.equal("2V1");
+        });
     });
 
 });

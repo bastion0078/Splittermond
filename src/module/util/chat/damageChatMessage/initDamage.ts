@@ -24,11 +24,11 @@ export const DamageInitializer ={
 async function rollDamage(damages: ProtoDamageImplement[], costType: 'K' | 'V' | "", speaker: SplittermondActor| null) {
 
     const damageResults = await rollDamages(damages);
-    const costVector = toCost(costType);
+    const _costBase = toCost(costType);
     const actorReference = speaker ? AgentReference.initialize(speaker) : null;
     const damageEvent = new DamageEvent({
         causer: actorReference,
-        costVector,
+        _costBase,
         formula: damageResults.totalRoll.formula,
         tooltip: await damageResults.totalRoll.getTooltip(),
         implements: damageResults.damageImplements,
@@ -70,10 +70,10 @@ async function rollDamages(damages: ProtoDamageImplement[]) {
 function toCost(damageType: 'K' | 'V' | "") {
     switch (damageType) {
         case 'K':
-            return new Cost(1, 0, true, true).asModifier();
+            return new Cost(1, 0, true, true).asPrimaryCost()
         case 'V':
-            return new Cost(0, 1, false, true).asModifier();
+            return new Cost(0, 1, false, true).asPrimaryCost()
         case "":
-            return new Cost(1, 0, false, true).asModifier();
+            return new Cost(1, 0, false, true).asPrimaryCost();
     }
 }
