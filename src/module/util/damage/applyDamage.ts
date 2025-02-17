@@ -63,8 +63,10 @@ export async function applyDamage(event: DamageEvent, target: SplittermondActor,
     const totalDamage = damageBeforeReduction.subtract(remainingReduction);
 
     const costModificationByUser= await userModification(damageRecord).then(x => event.costVector.multiply(x));
-
-    target.consumeCost("health", event.costBase.add(totalDamage).add(costModificationByUser).render(), "")
+    const finalDamage = event.costBase.add(totalDamage).add(costModificationByUser);
+    target.consumeCost("health", finalDamage.render(), "")
+    console.log(`${event.causer?.getAgent().name} dealt ${finalDamage.render()} damage to ${target.name}`);
+    console.debug(`Detailed Damage report: ${damageRecord.items.map(item => `${item.name}(${item.type}): ${item.baseValue} + ${item.modifiedBy} = ${item.subTotal}`).join(", ")}`);
 }
 
 function calculateActualDamageReduction(event: DamageEvent, target: SplittermondActor, realizedDamageReductionOverride: CostModifier) {
