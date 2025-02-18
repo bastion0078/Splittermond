@@ -1,4 +1,6 @@
 import type {QuenchBatchContext} from "@ethaks/fvtt-quench";
+import {foundryApi} from "../../../module/api/foundryApi";
+import {actorCreator} from "../../../module/data/EntityCreator";
 
 declare const game: any
 
@@ -48,6 +50,32 @@ export function foundryTypeDeclarationsTest(context: QuenchBatchContext) {
                     .to.equal("function");
 
             });
+        });
+    });
+
+    describe("User", () => {
+        ["isGM", "active", "id"].forEach(property => {
+            expect(foundryApi.currentUser, `User does not have ${property}`).to.have.property(property);
+            expect(typeof foundryApi.currentUser[property as keyof typeof foundryApi.currentUser], `User property ${property} is a function`)
+                .to.not.equal("function");
+        });
+
+        it("should return null for an unset character", () => {
+            const gm = foundryApi.users.find(user => user.isGM);
+            expect(gm?.character).to.be.null;
+        });
+
+        it("should return an actor for a set character", async () => {
+            const testActor = await actorCreator.createCharacter({
+                type: "character",
+                name: "Test Character",
+                system: {}
+            });
+            const nonGM = foundryApi.users.find(user => !user.isGM);
+            expect(nonGM, "No non-GM user found").to.not.be.null;
+            nonGM!.character = testActor;
+            expect(nonGM!.character).to.be.instanceof(Actor);
+            await Actor.deleteDocuments([testActor.id]);
         });
     });
 

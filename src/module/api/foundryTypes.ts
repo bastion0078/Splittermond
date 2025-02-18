@@ -35,6 +35,9 @@ export interface User {
     isGM: boolean;
     id: string;
     active: boolean;
+    get character(): Actor|null;
+    /** @internal*/
+    set character(actor: Actor|null);
 }
 
 export interface Socket {
@@ -95,6 +98,8 @@ declare global {
         updateSource(data: object): void;
 
         prepareBaseData(): void;
+
+        static deleteDocuments(documentId: string[]): Promise<void>
 
         /**
          * Computation of values that are not put to the database
