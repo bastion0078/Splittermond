@@ -61,7 +61,9 @@ export default class SplittermondActor extends Actor {
         cold: 0,
         poison: 0,
         bleeding: 0,
-        disease: 0
+        disease: 0,
+        light:0,
+        shadow:0,
     };
 
     actorData() {
