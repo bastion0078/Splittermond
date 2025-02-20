@@ -4,13 +4,16 @@ import {DamageType} from "../../config/damageTypes";
 import {CostModifier} from "../costs/Cost";
 
 
-interface DamageRecord {
+export interface DamageRecord {
+    attackerName: string;
+    defenderName: string;
     items: RecordItem[];
     isGrazingHit: boolean;
     damageReduction: number;
     ignoredReduction: number;
     totalBeforeGrazing: number;
     readonly totalDamage: number;
+    readonly effectiveDamageReduction: number;
 }
 
 class DamageRecordImpl implements DamageRecord {
@@ -19,9 +22,15 @@ class DamageRecordImpl implements DamageRecord {
     public damageReduction: number = 0;
     public ignoredReduction: number = 0;
     public totalBeforeGrazing: number = 0;
+    public attackerName: string = "";
+    public defenderName: string = "";
 
     public get totalDamage(): number {
         return Math.round(this.totalBeforeGrazing * (this.isGrazingHit ? 0.5 : 1) - this.damageReduction + this.ignoredReduction);
+    }
+
+    public get effectiveDamageReduction(): number {
+        return Math.max(this.damageReduction - this.ignoredReduction,0);
     }
 
     public setIgnoredReduction(value: CostModifier) {
@@ -52,7 +61,7 @@ interface RecordItem {
     subTotal: number;
 }
 
-type UserModifier = (x: DamageRecord) => Promise<number>;
+export type UserModifier = (x: DamageRecord) => Promise<number>;
 const noUserModification: UserModifier = async () => 0;
 
 export async function applyDamage(event: DamageEvent, target: SplittermondActor, userModification = noUserModification) {
@@ -62,6 +71,8 @@ export async function applyDamage(event: DamageEvent, target: SplittermondActor,
     }
 
     const damageRecord = new DamageRecordImpl();
+    damageRecord.attackerName = event.causer?.getAgent().name ?? "Unbekannt";
+    damageRecord.defenderName = target.name;
     damageRecord.isGrazingHit = event.isGrazingHit;
     damageRecord.damageReduction = target.damageReduction;
 
@@ -85,8 +96,8 @@ export async function applyDamage(event: DamageEvent, target: SplittermondActor,
     const damageAdjustment = await userModification(damageRecord).then(toCost);
     const userAdjustedDamage = event.costBase.add(totalDamage).add(damageAdjustment);
     target.consumeCost("health", userAdjustedDamage.render(), "")
-    console.log(`${event.causer?.getAgent().name} dealt ${userAdjustedDamage.render()} damage to ${target.name}`);
-    console.debug(`Detailed Damage report: ${damageRecord.items.map(item => `${item.name}(${item.type}): ${item.baseValue} + ${item.modifiedBy} = ${item.subTotal}`).join(", ")}`);
+    console.log(`Splittermond | ${event.causer?.getAgent().name} dealt ${userAdjustedDamage.render()} damage to ${target.name}`);
+    console.debug(`Splittermond | Detailed Damage report: ${damageRecord.items.map(item => `${item.name}(${item.type}): ${item.baseValue} + ${item.modifiedBy} = ${item.subTotal}`).join(", ")}`);
 }
 
 function calculateActualDamageReduction(event: DamageEvent, target: SplittermondActor, realizedDamageReductionOverride: CostModifier) {

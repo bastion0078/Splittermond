@@ -1,32 +1,32 @@
 {
   "TYPES": {
-        "Item": {
-    "weapon": "Waffe",
-    "projectile": "Geschoss",
-    "equipment": "Ausrüstung",
-    "shield": "Schild",
-    "armor": "Rüstung",
-    "spell": "Zauber",
-    "strength": "Stärke",
-    "weakness": "Schwäche",
-    "mastery": "Meisterschaft",
-    "species": "Spezies",
-    "culture": "Kultur",
-    "ancestry": "Abstammung",
-    "education": "Ausbildung",
-    "resource": "Resource",
-    "npcfeature": "Gegnermerkmal",
-    "moonsign": "Mondzeichen",
-    "language": "Sprache",
-    "culturelore": "Kulturkunde",
-    "statuseffect": "Zustand",
-    "spelleffect": "Zaubereffekt",
-    "npcattack": "Angriff"
-  },
-  "Actor": {
-    "character": "Spielercharakter",
-    "npc": "NSC"
-        }
+    "Item": {
+      "weapon": "Waffe",
+      "projectile": "Geschoss",
+      "equipment": "Ausrüstung",
+      "shield": "Schild",
+      "armor": "Rüstung",
+      "spell": "Zauber",
+      "strength": "Stärke",
+      "weakness": "Schwäche",
+      "mastery": "Meisterschaft",
+      "species": "Spezies",
+      "culture": "Kultur",
+      "ancestry": "Abstammung",
+      "education": "Ausbildung",
+      "resource": "Resource",
+      "npcfeature": "Gegnermerkmal",
+      "moonsign": "Mondzeichen",
+      "language": "Sprache",
+      "culturelore": "Kulturkunde",
+      "statuseffect": "Zustand",
+      "spelleffect": "Zaubereffekt",
+      "npcattack": "Angriff"
+    },
+    "Actor": {
+      "character": "Spielercharakter",
+      "npc": "NSC"
+    }
   },
   "SETTINGS": {},
   "splittermond": {
@@ -38,7 +38,21 @@
       "spellMessage": {
         "noHandler": "Es ist kein Bearbeiter für die Aktion '{action}' eingetragen. Bitte wenden Sie sich an den Entwickler.",
         "tooManyHandlers": "Es gibt mehr als einen eingetragenen Bearbeiter für die Aktion '{action}'. Bitte wenden Sie sich an den Entwickler."
+      },
+      "damageMessage": {
+        "applyToTargets": "Auf Ziele anwenden",
+        "applyToSelf": "Auf sich selbst anwenden"
       }
+    },
+    "damageMessage": {
+      "title": "{attacker} fügt {defender} Schaden zu",
+      "name": "Mittel",
+      "type": "Schadensart",
+      "baseValue": "verursacht Schaden",
+      "modifiedBy": "durch Resistenz modifiziert",
+      "subTotal": "Zwischensumme",
+      "damageReduction": "Schadensreduktion",
+      "damageReductionOverride": "davon ignoriert"
     },
     "start": "Start",
     "value": "Wert",

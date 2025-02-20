@@ -8,7 +8,21 @@
       "spellMessage": {
         "noHandler": "No handler registered for action '{action}'. Please contact the developer.",
         "tooManyHandlers": "More than one handler registered for action '{action}'. Please contact the developer"
+      },
+      "damageMessage": {
+        "applyToTargets": "Apply to targets",
+        "applyToSelf": "Apply to self"
       }
+    },
+    "damageMessage": {
+      "title": "{attacker} deals damage to {defender} ",
+      "name": "Mean",
+      "type": "damage type",
+      "baseValue": "causes damage",
+      "modifiedBy": "by weakness",
+      "subTotal": "sub total",
+      "damageReduction": "damage reduction",
+      "damageReductionOverride": "ignored"
     },
     "message": {
       "itemImported": "The item \"{name}\" was imported as \"{type}\"!",

@@ -1,0 +1,58 @@
+<div>
+    <div>
+        <table style="max-width: 300px">
+            <thead>
+            <tr>
+                <th>{{localize "splittermond.damageMessage.name"}}</th>
+                <th>{{localize "splittermond.damageMessage.type"}}</th>
+                <th>{{localize "splittermond.damageMessage.baseValue"}}</th>
+                <th>{{localize "splittermond.damageMessage.modifiedBy"}}</th>
+                <th>{{localize "splittermond.damageMessage.subTotal"}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#items}}
+                <tr>
+                    <td>{{name}}</td>
+                    <td>{{type}}</td>
+                    <td style="text-align: right">{{baseValue}}</td>
+                    <td>{{modifiedBy}}</td>
+                    <td style="text-align: right">{{subTotal}}</td>
+                </tr>
+            {{/items}}
+            </tbody>
+        </table>
+        <hr/>
+        <table>
+            <tbody>
+            {{#if isGrazingHit}}
+                <tr>
+                    <td colspan="4">{{localize "splittermond.grazingHit"}}</td>
+                    <td>&divide;2</td>
+                </tr>
+            {{/if}}
+            <tr>
+                <td>{{localize "splittermond.damageMessage.damageReduction"}}</td>
+                <td>{{damageReduction}}</td>
+                <td>{{localize "splittermond.damageMessage.damageReductionOverride"}}</td>
+                <td>{{ignoredReduction}}</td>
+                <td style="text-align: right">{{effectiveDamageReduction}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="properties-editor">
+        <label for="damageInput">{{localize "splittermond.damage"}}</label>
+        <div class="row">
+            <button class="button-inline" type="button" data-action="dec-value" data-input-query="input[name='damage']">
+                <i class="fa fa-minus" aria-hidden="true"></i></button>
+            <input style="width:50px" id="damageInput" name="damage" value="{{totalDamage}}" type="text">
+            <button class="button-inline" type="button" data-action="inc-value" data-input-query="input[name='damage']">
+                <i class="fa fa-plus" aria-hidden="true"></i></button>
+            <button class="button-inline" type="button" data-action="half-value"
+                    data-input-query="input[name='damage']">
+                &frac12;
+            </button>
+        </div>
+    </div>
+</div>

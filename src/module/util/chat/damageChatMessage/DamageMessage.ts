@@ -6,6 +6,7 @@ import {DamageEvent} from "../../damage/DamageEvent";
 import {foundryApi} from "../../../api/foundryApi";
 import ApplyDamageDialog from "../../../apps/dialog/apply-damage-dialog";
 import {DamageFeature, DamageFeatureSchema} from "../../damage/DamageFeature";
+import {applyDamageToSelf} from "./damageApplicationHandlers";
 
 const constructorRegistryKey = "DamageMessage";
 
@@ -47,13 +48,14 @@ export class DamageMessage extends SplittermondDataModel<DamageMessageType> impl
             source: this.getPrincipalDamageComponent().implementName,
             tooltip: this.damageEvent.tooltip,
             actions: [
-                this.renderApplyDamageToTargetAction()
+                this.renderApplyDamageToTargetAction(),
+                this.renderApplyDamageToSelfAction()
             ],
         }
     }
 
-    private getPrincipalDamageComponent(){
-        return this.damageEvent.implements.sort((a,b)=>b.damage-a.damage)[0];
+    private getPrincipalDamageComponent() {
+        return this.damageEvent.implements.sort((a, b) => b.damage - a.damage)[0];
     }
 
     private renderFeaturesToDisplay() {
@@ -69,20 +71,36 @@ export class DamageMessage extends SplittermondDataModel<DamageMessageType> impl
                 localAction: "applyDamageToTargets",
             },
             icon: "fa-heart-broken",
-            name: foundryApi.localize("splittermond.applyDamage")
+            name: foundryApi.localize("splittermond.chatCard.damageMessage.applyToTargets")
+        }
+    }
+
+    private renderApplyDamageToSelfAction() {
+        return {
+            classes: "splittermond-chat-action ",
+            data: {
+                localAction: "applyDamageToSelf",
+            },
+            icon: "fa-heart-broken",
+            name: foundryApi.localize("splittermond.chatCard.damageMessage.applyToSelf")
         }
     }
 
     handleGenericAction(data: { action: string }): Promise<void> {
         if (data.action === "applyDamageToTargets") {
             const damageType = this.damageEvent.costVector._channeled ? "K" :
-                this.damageEvent.costVector._consumed?"V":"";
+                this.damageEvent.costVector._consumed ? "V" : "";
             return ApplyDamageDialog.create(this.damageEvent.totalDamage(), damageType, "")
+        } else if (data.action === "applyDamageToSelf") {
+            return applyDamageToSelf(this.damageEvent).catch((reportError));
         }
-        return Promise.resolve();
+        return Promise.reject();
     }
+}
 
-
+function reportError(e:Error) {
+   console.error(e);
+   foundryApi.reportError("Unknown error occurred");
 }
 
 addToRegistry(constructorRegistryKey, DamageMessage);
