@@ -100,4 +100,12 @@ export class PrimaryCost extends SplittermondDataModel<PrimaryCostType>{
             _consumed: !this.isChanneled || !strict ? this._consumed: 0,
       })
     }
+
+    round():PrimaryCost {
+        return new (this.constructor as typeof PrimaryCost)({
+            _nonConsumed: Math.round(this._nonConsumed),
+            _consumed: Math.round(this._consumed),
+            _isChanneled: this._isChanneled
+        });
+    }
 }

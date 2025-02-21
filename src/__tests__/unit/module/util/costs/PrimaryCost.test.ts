@@ -240,7 +240,40 @@ describe("Fractional cost modifiers", () => {
 
             expect(result.render()).to.equal(`K${Math.round(number)}V${Math.round(number)}`);
         });
+
+        it("round function should deliver equivalent results", () => {
+            const base = new Cost(0,0,true,true).asPrimaryCost();
+            const modifier = new Cost(0, number, true, true).asModifier();
+            const result = base.add(modifier);
+
+            expect(result.render()).to.equal(result.round().render());
+        });
+    });
+    [[5.7,7.5],[3.3,101.0001]].forEach(([number1, number2]) => {
+
+        it(`should round mixed costs of ${number1} ${number2}`, () => {
+            const base = new Cost(0,0,false,true).asPrimaryCost();
+            const modifier = new Cost(number1, number2, false, true).asModifier();
+            const result = base.add(modifier);
+
+            expect(result.render()).to.equal(`${Math.round(number1)+Math.round(number2)}V${Math.round(number2)}`);
+        });
+
+        it(`should round channeled mixed costs of ${number1} ${number2}`, () => {
+            const base = new Cost(0,0,true,true).asPrimaryCost();
+            const modifier = new Cost(number1, number2, true, true).asModifier();
+            const result = base.add(modifier);
+
+            expect(result.render()).to.equal(`K${Math.round(number1)+Math.round(number2)}V${Math.round(number2)}`);
+        });
+
+        it("round function should deliver equivalent results", () => {
+            const base = new Cost(0,0,true,true).asPrimaryCost();
+            const modifier = new Cost(number1, number2, true, true).asModifier();
+            const result = base.add(modifier);
+
+            expect(result.render()).to.equal(result.round().render());
+        });
     });
 
-
-})
+});
