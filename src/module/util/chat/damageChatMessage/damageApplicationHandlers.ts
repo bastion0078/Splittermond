@@ -19,7 +19,13 @@ export async function applyDamageToSelf(event: DamageEvent) {
 
     calculateDamageOnTarget(event, target, userReporter);
     await userModifier.getUserAdjustedDamage(userReporter.getReport()).then((userAdjustedDamage) => {
-        applyDamage(event.causer?.getAgent().name ?? '', target, userAdjustedDamage);
+        applyDamage(target, userAdjustedDamage,
+            {
+                sourceName: event.causer?.getAgent().name ?? '',
+                principalImplement: [...event.implements]
+                    .sort((a,b)=> a.damage-b.damage)[0]
+                    .implementName
+            });
     });
 
 
@@ -29,12 +35,20 @@ function findUserActor() {
     try {
         return referencesUtils.findBestUserActor().getAgent();
     } catch (e) {
-        foundryApi.warnUser("splittermond.chatCard.noActorFound");
+        foundryApi.warnUser("splittermond.chatCard.damageMessage.noActorFound");
         return null
     }
 }
 
-function applyDamage(sourceName: string, target: SplittermondActor, damage: PrimaryCost) {
-    target.consumeCost("health", damage.render(), "")
-    console.log(`Splittermond | ${sourceName} dealt ${damage.render()} damage to ${target.name}`);
+function applyDamage(target: SplittermondActor, damage: PrimaryCost, reporting: {
+    sourceName: string,
+    principalImplement: string
+}) {
+
+    target.consumeCost(
+        "health",
+        damage.render(),
+        foundryApi.format("splittermond.chatCard.damageMessage.consumptionMessage", reporting)
+    );
+    console.log(`Splittermond | ${reporting.sourceName} dealt ${damage.render()} damage to ${target.name}`);
 }

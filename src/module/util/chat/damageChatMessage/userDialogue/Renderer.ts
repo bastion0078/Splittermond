@@ -74,7 +74,7 @@ export class Renderer{
     private mapRecords(records:UserReportRecord[]):DamageRecordItem[]{
         return records.map(record=>({
             name: record.implementName,
-            type: foundryApi.localize(`splittermond.damageTypes.short${record.damageType}`),
+            type: foundryApi.localize(`splittermond.damageTypes.short.${record.damageType}`),
             baseValue: record.baseDamage.length,
             modifiedBy: record.modifiedBy.length,
             subTotal: record.appliedDamage.length,

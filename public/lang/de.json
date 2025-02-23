@@ -41,18 +41,25 @@
       },
       "damageMessage": {
         "applyToTargets": "Auf Ziele anwenden",
-        "applyToSelf": "Auf sich selbst anwenden"
+        "applyToSelf": "Auf sich selbst anwenden",
+        "noActorFound": "Kein Ziel für Schaden gefunden.",
+        "consumptionMessage":"{principalImplement} von {sourceName}"
       }
     },
     "damageMessage": {
       "title": "{attacker} fügt {defender} Schaden zu",
       "name": "Mittel",
       "type": "Schadensart",
-      "baseValue": "verursacht Schaden",
-      "modifiedBy": "durch Resistenz modifiziert",
+      "baseValue": "Schaden",
+      "modifiedBy": "Verwundbarkeit",
       "subTotal": "Zwischensumme",
       "damageReduction": "Schadensreduktion",
-      "damageReductionOverride": "davon ignoriert"
+      "damageReductionOverride": "davon ignoriert",
+      "displaySettings": {
+        "once": "Nur den ersten",
+        "never": "Nie",
+        "always": "Immer"
+      }
     },
     "start": "Start",
     "value": "Wert",
@@ -603,6 +610,15 @@
       "HGMultiplier": {
         "name": "Heldengrad-Multiplikator",
         "hint": "Der Multiplikator für die Berechnung der Fertigkeitspunkte und Attributsmodifikatoren."
+      },
+      "displayDamageDialog": {
+        "name": "Schadensdialog anzeigen",
+        "hint": "Zeigt einen Dialog zur Eingabe des Schadens an, wenn ein Token Schaden erhält.",
+        "options": {
+          "once": "Nur den ersten",
+          "never": "Nie",
+          "always": "Immer"
+        }
       }
     },
     "error": {

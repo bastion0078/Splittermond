@@ -7,7 +7,7 @@
                 <th>{{localize "splittermond.damageMessage.type"}}</th>
                 <th>{{localize "splittermond.damageMessage.baseValue"}}</th>
                 <th>{{localize "splittermond.damageMessage.modifiedBy"}}</th>
-                <th>{{localize "splittermond.damageMessage.subTotal"}}</th>
+                <th>&sum;</th>
             </tr>
             </thead>
             <tbody>
@@ -20,11 +20,10 @@
                     <td style="text-align: right">{{subTotal}}</td>
                 </tr>
             {{/each}}
-            </tbody>
-        </table>
-        <hr/>
-        <table>
-            <tbody>
+            <tr>
+                <td colspan="4">{{localize "splittermond.damageMessage.subTotal"}}</td>
+                <td style="text-align: right;border-top: 1px solid black">{{totalBeforeGrazing}}</td>
+            </tr>
             {{#if isGrazingHit}}
                 <tr>
                     <td colspan="4">{{localize "splittermond.grazingHit"}}</td>
@@ -32,10 +31,7 @@
                 </tr>
             {{/if}}
             <tr>
-                <td>{{localize "splittermond.damageMessage.damageReduction"}}</td>
-                <td>{{damageReduction}}</td>
-                <td>{{localize "splittermond.damageMessage.damageReductionOverride"}}</td>
-                <td>{{ignoredReduction}}</td>
+                <td colspan="4">{{localize "splittermond.damageMessage.damageReduction"}}</td>
                 <td style="text-align: right">{{effectiveDamageReduction}}</td>
             </tr>
             </tbody>
@@ -46,7 +42,7 @@
         <div class="row">
             <button class="button-inline" type="button" data-action="dec-value" data-input-query="input[name='damage']">
                 <i class="fa fa-minus" aria-hidden="true"></i></button>
-            <input style="width:50px" id="damageInput" name="damage" value="{{totalDamage}}" type="text">
+            <input style="width:60px" id="damageInput" name="damage" value="{{totalDamage}}" type="text">
             <button class="button-inline" type="button" data-action="inc-value" data-input-query="input[name='damage']">
                 <i class="fa fa-plus" aria-hidden="true"></i></button>
             <button class="button-inline" type="button" data-action="half-value"
@@ -54,20 +50,19 @@
                 &frac12;
             </button>
         </div>
-        <div class="row">
-            <label for="costTypeSelect"></label>
-            <select id="costTypeSelect" name="costTypeSelect">
-                <option value="V"{{#if (eq type "V")}} selected{{/if}}>{{localize "splittermond.normalDamage"}}</option>
-                <option value=""{{#if (eq type "")}} selected{{/if}}>{{localize "splittermond.stunDamage"}}</option>
-                <option value="K"{{#if (eq type "K")}} selected{{/if}}>{{localize
-                        "splittermond.channeledDamage"}}</option>
-            </select>
-        </div>
-        {{#if displaySplinterpoints}}
-            <button class="dialog-buttons" data-action="useSplinterpoint">
-                <i class="fas fa-moon"></i>
-                {{localize "splittermond.splinterpoint"}}
-            </button>
-        {{/if}}
+        <label>{{localize "splittermond.damageType"}}</label>
+        <select id="costTypeSelect" name="costTypeSelect" style="max-width: 100px">
+            <option value="V"{{#if (eq type "V")}} selected{{/if}}>{{localize "splittermond.normalDamage"}}</option>
+            <option value=""{{#if (eq type "")}} selected{{/if}}>{{localize "splittermond.stunDamage"}}</option>
+            <option value="K"{{#if (eq type "K")}} selected{{/if}}>{{localize
+                    "splittermond.channeledDamage"}}</option>
+        </select>
     </div>
+    {{#if displaySplinterpoints}}
+        <button class="dialog-buttons" data-action="useSplinterpoint">
+            <div style="display: flex; justify-content: center; align-items: center;max-width: 50%">
+                <i class="fas fa-moon"></i>&nbsp;{{localize "splittermond.splinterpoint"}}
+            </div>
+        </button>
+    {{/if}}
 </div>

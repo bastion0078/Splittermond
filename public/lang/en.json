@@ -11,7 +11,9 @@
       },
       "damageMessage": {
         "applyToTargets": "Apply to targets",
-        "applyToSelf": "Apply to self"
+        "applyToSelf": "Apply to self",
+        "noActorFound": "Found no actor to route damage to",
+        "consumptionMessage":"{principalImplement} by {sourceName}"
       }
     },
     "damageMessage": {
@@ -36,6 +38,15 @@
       "HGMultiplier": {
         "name": "Hero level multiplier",
         "hint": "Multiplier for calculating skill points and attribute modifiers."
+      },
+      "displayDamageDialog": {
+        "name": "Show damage dialog",
+        "hint": "Displays a dialog to review the damage applied to target",
+        "options": {
+          "once": "First target only",
+          "never": "Never",
+          "always": "Always"
+        }
       }
     },
     "damageTypes": {

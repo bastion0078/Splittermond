@@ -14,9 +14,9 @@ let displayDamageDialogue: Awaited<ReturnType<typeof settings.registerString>> =
 };
 settings.registerString("displayDamageDialog", {
     choices: {
-        "once": "splittermond.damageMessage.display.once",
-        "always": "splittermond.damageMessage.display.always",
-        "never": "splittermond.damageMessage.display.never"
+        "once": "splittermond.settings.displayDamageDialog.options.once",
+        "always": "splittermond.settings.displayDamageDialog.options.always",
+        "never": "splittermond.settings.displayDamageDialog.options.never"
     },
     config: true,
     position: 0,
@@ -24,7 +24,7 @@ settings.registerString("displayDamageDialog", {
     default: "once"
 }).then((value) => displayDamageDialogue = value);
 
-type UserAction = "cancel"|"apply"|"seeNext"|null;
+type UserAction = "cancel" | "apply" | "seeNext" | null;
 export class UserModificationDialogue {
     private storedUserAdjustment: CostModifier = CostModifier.zero;
     private storedCostVector = toCost("V").toModifier(true);
@@ -113,7 +113,7 @@ class DamageReportDialog extends FoundryDialog {
                 }
             }],
             //@ts-expect-error
-            submit:()=>{dialog.close(); resolve(dialog.getUserAdjustments());}
+            submit:(e,b,d)=>{dialog.close(); resolve(dialog.getUserAdjustments());}
         }, userReport.totalDamage.length, renderedContent.costType, userReport.target);
         return dialog;
     }

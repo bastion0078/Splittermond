@@ -41,7 +41,6 @@ export interface UserReportRecord {
 
 export class UserReporterImpl implements UserReporter {
     private _target: SplittermondActor | null = null;
-    private damageReduction: CostModifier = new Cost(0, 0, false).asModifier();
     public _event: EventReport | null = null;
     private records: UserReportRecord[] = [];
     public totalDamage: CostModifier = new Cost(0, 0, false).asModifier();
@@ -75,7 +74,7 @@ export class UserReporterImpl implements UserReporter {
         }
         return {
             target: this._target,
-            damageReduction: this.damageReduction,
+            damageReduction: this._event.costVector.multiply(this._target.damageReduction),
             event: this._event,
             records: this.records,
             totalDamage: this.totalDamage,
