@@ -1,7 +1,7 @@
 import SplittermondActor from "../../actor/actor";
 import {DamageEvent} from "./DamageEvent";
 import {DamageType} from "../../config/damageTypes";
-import {Cost, CostModifier} from "../costs/Cost";
+import {CostModifier} from "../costs/Cost";
 import {AgentReference} from "../../data/references/AgentReference";
 import {PrimaryCost} from "../costs/PrimaryCost";
 
@@ -9,32 +9,25 @@ import {PrimaryCost} from "../costs/PrimaryCost";
 export interface UserReporter {
     set target(value: SplittermondActor);
 
-    set subtotal(value: CostModifier);
+    set totalFromImplements(value: CostModifier);
 
     set overriddenReduction(value: CostModifier);
 
     set totalDamage(value: CostModifier);
 
-    set event(event: { causer: AgentReference | null, isGrazingHit: boolean, costBase: PrimaryCost });
+    set event(event: { causer: AgentReference | null, isGrazingHit: boolean, costBase: PrimaryCost, costVector: CostModifier });
 
     addRecord(implementName: string, damageType: DamageType, baseDamage: CostModifier, appliedDamage: CostModifier): void;
-
-    getUserAdjustments(): Promise<UserAdjustment>;
 }
 
-export interface UserAdjustment {
-    readonly damageAdjustment: CostModifier;
-    readonly costBase: PrimaryCost;
-    readonly costBaseChanged: boolean;
-    readonly operationCancelled: boolean;
-}
+
 
 
 export class NoReporter implements UserReporter {
     set target(__: SplittermondActor) {
     }
 
-    set subtotal(__: CostModifier) {
+    set totalFromImplements(__: CostModifier) {
     }
 
     set overriddenReduction(__: CostModifier) {
@@ -43,22 +36,11 @@ export class NoReporter implements UserReporter {
     set totalDamage(__: CostModifier) {
     }
 
-    set event(__: { causer: AgentReference | null; isGrazingHit: boolean; costBase: PrimaryCost }) {
+    set event(__: { causer: AgentReference | null; isGrazingHit: boolean; costBase: PrimaryCost, costVector: CostModifier }) {
     }
 
     addRecord(): void {
     }
-
-    getUserAdjustments(): Promise<UserAdjustment> {
-        var zeroCost = new Cost(0, 0, false).asPrimaryCost();
-        return Promise.resolve({
-            damageAdjustment: zeroCost.toModifier(),
-            costBase: zeroCost,
-            costBaseChanged: false,
-            operationCancelled: false
-        });
-    }
-
 }
 
 export function calculateDamageOnTarget(event: DamageEvent, target: SplittermondActor, reporter: UserReporter = new NoReporter()): PrimaryCost {
@@ -81,7 +63,7 @@ export function calculateDamageOnTarget(event: DamageEvent, target: Splittermond
         damageBeforeGrazingAndReduction = damageBeforeGrazingAndReduction.add(damageAdded);
         reporter.addRecord(implement.implementName, implement.damageType, implement.bruttoHealthCost, damageAdded);
     }
-    reporter.subtotal = damageBeforeGrazingAndReduction;
+    reporter.totalFromImplements = damageBeforeGrazingAndReduction;
     reporter.overriddenReduction = realizedDamageReductionOverride;
 
     const damageBeforeReduction = damageBeforeGrazingAndReduction.multiply(event.isGrazingHit ? 0.5 : 1);

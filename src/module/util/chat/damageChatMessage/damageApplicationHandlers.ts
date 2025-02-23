@@ -1,27 +1,40 @@
 import {DamageEvent} from "../../damage/DamageEvent";
 import {foundryApi} from "../../../api/foundryApi";
 import {UserModificationDialogue} from "./UserModificationDialogue";
-import {applyDamage} from "../../damage/applyDamage";
+import {calculateDamageOnTarget} from "../../damage/calculateDamageOnTarget";
 import {referencesUtils} from "../../../data/references/referencesUtils";
+import {UserReporterImpl} from "./UserReporterImpl";
+import {PrimaryCost} from "../../costs/PrimaryCost";
+import SplittermondActor from "../../../actor/actor";
 
 
-export function applyDamageToSelf(event:DamageEvent){
+export async function applyDamageToSelf(event: DamageEvent) {
 
     const target = findUserActor();
-    if(target === null) {
+    if (target === null) {
         return Promise.resolve();
-    };
+    }
     const userModifier = new UserModificationDialogue();
+    const userReporter = new UserReporterImpl();
 
-    return applyDamage(event, target, (record) => userModifier.produceUserModification(record));
+    calculateDamageOnTarget(event, target, userReporter);
+    await userModifier.getUserAdjustedDamage(userReporter.getReport()).then((userAdjustedDamage) => {
+        applyDamage(event.causer?.getAgent().name ?? '', target, userAdjustedDamage);
+    });
+
 
 }
 
-function findUserActor(){
+function findUserActor() {
     try {
         return referencesUtils.findBestUserActor().getAgent();
-    }catch(e){
+    } catch (e) {
         foundryApi.warnUser("splittermond.chatCard.noActorFound");
         return null
     }
+}
+
+function applyDamage(sourceName: string, target: SplittermondActor, damage: PrimaryCost) {
+    target.consumeCost("health", damage.render(), "")
+    console.log(`Splittermond | ${sourceName} dealt ${damage.render()} damage to ${target.name}`);
 }

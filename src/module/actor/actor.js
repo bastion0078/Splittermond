@@ -201,9 +201,9 @@ export default class SplittermondActor extends Actor {
         return this.type === "npc" ? 6 : this.system.experience.heroLevel + 2 + this.modifier.value("bonuscap");
     }
 
-    /**@return {{value:number, max:number}|undefined}*/
+    /**@return {{value:number, max:number}}*/
     get splinterpoints() {
-        return this.system.splinterpoints;
+        return this.system.splinterpoints ?? {value: 0, max: 0};
     }
 
     prepareEmbeddedDocuments() {
@@ -961,11 +961,15 @@ export default class SplittermondActor extends Actor {
     }
 
     /**
-     * This is a stub
+     * This is a stub. It currently returns the flat upgrade value for health and skills.
+     * Later it should check for specific masteries that increase the bonus values.
      * @param {SplittermondSkill} skillName
      * @return {number}
      */
     #getSplinterpointBonus(skillName) {
+        if(skillName === "health"){
+            return 5;
+        }
         return 3;
     }
 

@@ -1,55 +1,102 @@
 import {DialogV2ConstructorInput, DialogV2RenderOptions, FoundryDialog} from "../../../api/Dialog";
 import {foundryApi} from "../../../api/foundryApi";
-import {DamageRecord} from "../../damage/applyDamage";
+import {UserReport} from "./UserReporterImpl";
+import {Renderer} from "./userDialogue/Renderer";
+import {CostType, fromCost, isCostType, toCost} from "../../costs/costTypes";
+import {CostModifier} from "../../costs/Cost";
+import {PrimaryCost} from "../../costs/PrimaryCost";
+import {settings} from "../../../settings";
+import SplittermondActor from "../../../actor/actor";
+
+let displayDamageDialogue: Awaited<ReturnType<typeof settings.registerString>> = {
+    get: () => "once", set: () => {
+    }
+};
+settings.registerString("displayDamageDialog", {
+    choices: {
+        "once": "splittermond.damageMessage.display.once",
+        "always": "splittermond.damageMessage.display.always",
+        "never": "splittermond.damageMessage.display.never"
+    },
+    config: true,
+    position: 0,
+    scope: "client",
+    default: "once"
+}).then((value) => displayDamageDialogue = value);
 
 type UserAction = "cancel"|"apply"|"seeNext"|null;
 export class UserModificationDialogue {
-    private previousUserAdjustment: number = 0;
-    //@ts-expect-error
-    private previousUserAction: UserAction= null;
-    private showNext:boolean = true;
+    private storedUserAdjustment: CostModifier = CostModifier.zero;
+    private storedCostVector = toCost("V").toModifier(true);
+    private storedCostBase: PrimaryCost = toCost("V").subtract(this.storedCostVector);
+    private costBaseChanged: boolean = false;
+    private showNext:boolean = displayDamageDialogue.get() !== "never";
 
 
 
 
-    async produceUserModification(damageRecord: DamageRecord): Promise<number> {
-        if(!this.showNext){
-            return this.previousUserAdjustment;
+    async getUserAdjustedDamage(userReport: UserReport): Promise<PrimaryCost> {
+        if(!this.showNext) {
+            return Promise.resolve(this.calculateNewDamage(userReport.totalDamage , this.storedUserAdjustment));
         }
-        return new Promise(async (resolve) => {
-            const damageDialog = await DamageReportDialog.create(damageRecord);
-            await damageDialog.render({force: true});
-            if(damageDialog.selectedAction === "apply"){
-                this.previousUserAdjustment = damageDialog.userAdjustment;
-            }else if(damageDialog.selectedAction === "seeNext"){
-                this.previousUserAdjustment = damageDialog.userAdjustment;
-                this.showNext = true;
-                this.previousUserAction = "apply"
+
+        this.storedCostBase = userReport.event.costBase;
+        const userResult = await this.showNextDialog(userReport);
+        if(userResult.selectedAction == "cancel"){
+            this.showNext = false;
+            this.storedUserAdjustment = CostModifier.zero;
+        }
+        let adjustmentToUse = this.storedUserAdjustment;
+        if(userResult.selectedAction == "apply"){
+            if(fromCost(this.storedCostBase)[0] !== userResult.costBase){
+                this.costBaseChanged = true;
             }
-            this.previousUserAction = "cancel"
-            resolve(this.previousUserAdjustment);
+            this.storedCostVector = toCost(userResult.costBase).toModifier(true);
+            this.storedCostBase = toCost(userResult.costBase).subtract(this.storedCostVector);
+            const adjustmentToStore = userResult.damageAdjustment + userResult.splinterpointBonus
+            this.storedUserAdjustment = this.storedCostBase.add(this.storedCostVector).toModifier(true).multiply(adjustmentToStore);
+            adjustmentToUse = this.storedCostBase.add(this.storedCostVector).toModifier(true).multiply(userResult.damageAdjustment);
+        }
+        return this.calculateNewDamage(userReport.totalDamage, adjustmentToUse);
+
+    }
+
+    private calculateNewDamage(originalDamage: CostModifier, damageAdjustment: CostModifier): PrimaryCost{
+        const newDamage = originalDamage.add(damageAdjustment);
+        const newVector = this.costBaseChanged ? this.storedCostVector.multiply(newDamage.length) : newDamage
+        return this.storedCostBase.add(newVector);
+
+
+    }
+
+    private async showNextDialog(userReport: UserReport):Promise<UserAdjustments>{
+        return new Promise(async (resolve) => {
+            const damageDialog = await DamageReportDialog.create(userReport, resolve);
+            await damageDialog.render({force: true});
         });
     }
 }
 
+type UserAdjustments = ReturnType<DamageReportDialog["getUserAdjustments"]>;
 class DamageReportDialog extends FoundryDialog {
-    currentUserAdjustment: number = 0;
-    previousValue: number;
-    selectedAction:UserAction =null;
-    readonly originalValue:number;
+    private currentUserAdjustment: number = 0;
+    private baseChange: boolean = false;
+    private selectedAction:UserAction =null;
+    private splinterpointBonus= 0;
+    private previousValue: number;
 
-    static async create(damageRecord: DamageRecord): Promise<DamageReportDialog> {
-        const html = await foundryApi.renderer("systems/splittermond/templates/apps/dialog/new-damage-report.hbs", damageRecord);
+    static async create(userReport: UserReport, resolve:(x:UserAdjustments)=>void): Promise<DamageReportDialog> {
+        const renderedContent = new Renderer(userReport);
         const dialog = new DamageReportDialog({
             //@ts-expect-error
             classes: ["splittermond", "dialog", "dialog-apply-damage"],
             window: {
                 title: foundryApi.format("splittermond.damageMessage.title", {
-                    attacker: damageRecord.attackerName,
-                    defender: damageRecord.defenderName
+                    attacker: renderedContent.attackerName,
+                    defender: renderedContent.defenderName
                 })
             },
-            content: html,
+            content: await renderedContent.getHtml(),
             buttons: [{
                 action: "cancel",
                 label: foundryApi.localize("splittermond.cancel"),
@@ -66,15 +113,26 @@ class DamageReportDialog extends FoundryDialog {
                 }
             }],
             //@ts-expect-error
-            submit:()=>{dialog.close()}
-        }, damageRecord.totalDamage);
+            submit:()=>{dialog.close(); resolve(dialog.getUserAdjustments());}
+        }, userReport.totalDamage.length, renderedContent.costType, userReport.target);
         return dialog;
     }
 
-    constructor(options: DialogV2ConstructorInput, originalDamage: number) {
+
+    constructor(options: DialogV2ConstructorInput, originalDamage: number,  private currentCostType: CostType, private target: SplittermondActor) {
         super(options);
         this.previousValue = originalDamage;
-        this.originalValue = originalDamage;
+    }
+
+    getUserAdjustments(){
+        return {
+            damageAdjustment: this.currentUserAdjustment,
+            costBase: this.currentCostType,
+            costBaseChanged: this.baseChange,
+            selectedAction: this.selectedAction,
+            splinterpointBonus: this.splinterpointBonus,
+        }
+
     }
 
     async render(options: DialogV2RenderOptions) {
@@ -98,10 +156,28 @@ class DamageReportDialog extends FoundryDialog {
                 this.previousValue = newValue;
             }
         });
+        $(result.element).find("button.dialog-buttons[data-action='useSplinterpoint']").on("click", () => {
+                this.spendSplinterpoint();
+                $(result.element).find("button.dialog-buttons[data-action='useSplinterpoint']").prop("disabled", true);
+                this.operateOnInput((value) => value - this.splinterpointBonus);
+        });
+        $(result.element).find("select[name='costTypeSelect']").on("change", (event) => {
+            if(event.target instanceof HTMLSelectElement) {
+                const selectedValue = Array.from(event.target.selectedOptions).map(o => o.value)[0];
+                if(isCostType(selectedValue)){
+                    this.currentCostType = selectedValue
+                    this.baseChange = true;
+                    event.stopPropagation();
+                }else {
+                    console.warn(`Splittermond | Matched SELECT element had invalid selected option ${selectedValue}`);
+                }
+            }
 
+        });
 
         return result;
     }
+
     private operateOnInput(operate:(value:number)=>number){
         const currentValue = this.getInputValue();
         if(currentValue !== null){
@@ -116,12 +192,18 @@ class DamageReportDialog extends FoundryDialog {
     private getInputValue():number|null{
         return parseInputValue(this.getInput().val());
     }
+
     private getInput(){
         return $(this.element).find("input[name='damage']")
     }
 
-    get userAdjustment(): number {
-        return this.currentUserAdjustment;
+    private spendSplinterpoint(){
+        const splinterpointAction = this.target.spendSplinterpoint();
+        if (splinterpointAction.pointSpent){
+            const splinterpointBonus  = splinterpointAction.getBonus("health")
+            this.currentUserAdjustment -= splinterpointBonus;
+            this.splinterpointBonus = splinterpointBonus;
+        }
     }
 }
 
@@ -137,32 +219,3 @@ function parseInputValue(input: string | number | string[] | undefined): number 
     }
 
 }
-
-
-/*
-    /**
-     * @deprecated this should work most closely as activate listeners, but it is an internal method.
-     * we probably want to use addEventListener instead
-    _attachFrameListeners(html:JQuery<HTMLElement>){ {
-        html.find('[data-action="inc-value"]').on("click",(event) => {
-            const query = $(event.currentTarget).closestData('input-query');
-            let value = parseInt($(html).find(query).val()) || 0;
-            $(html).find(query).val(value + 1).change();
-        });
-
-        html.find('[data-action="dec-value"]').on("click",(event) => {
-            const query = $(event.currentTarget).closestData('input-query');
-            let value = parseInt($(html).find(query).val()) || 0;
-            $(html).find(query).val(value - 1).change();
-        });
-
-        html.find('[data-action="half-value"]').on("click", (event) => {
-            const query = $(event.currentTarget).closestData('input-query');
-            let value = parseInt($(html).find(query).val()) || 0;
-            $(html).find(query).val(Math.round(value / 2)).change();
-        });
-
-       //@ts-expect-error
-       super._attachFrameListeners(html)
-}
-*/

@@ -2,7 +2,10 @@ import {DamageType, damageTypes} from "../../../../../module/config/damageTypes"
 import {createDamageEvent, createDamageImplement} from "./damageEventTestHelper";
 import sinon, {SinonSandbox} from "sinon";
 import SplittermondActor from "../../../../../module/actor/actor";
-import {calculateDamageOnTarget, UserAdjustment, UserReporter} from "../../../../../module/util/damage/calculateDamageOnTarget";
+import {
+    calculateDamageOnTarget,
+    UserReporter
+} from "../../../../../module/util/damage/calculateDamageOnTarget";
 import {Cost, CostModifier} from "../../../../../module/util/costs/Cost";
 import {expect} from "chai";
 import {AgentReference} from "module/data/references/AgentReference";
@@ -196,7 +199,7 @@ class MockReporter implements UserReporter {
     public totalDamage: CostModifier = new Cost(0, 0, false).asModifier();
     public overriddenReduction: CostModifier = new Cost(0, 0, false).asModifier();
 
-    set event(value: { causer: AgentReference | null; isGrazingHit: boolean; costBase: PrimaryCost; }) {
+    set event(value: { causer: AgentReference | null; isGrazingHit: boolean; costBase: PrimaryCost, costVector: CostModifier }) {
         this._event = value;
     }
 
@@ -208,15 +211,6 @@ class MockReporter implements UserReporter {
         this.records.push({implementName, damageType, baseDamage, appliedDamage});
     }
 
-    public subtotal: CostModifier = new Cost(0, 0, false).asModifier();
-
-    getUserAdjustments(): Promise<UserAdjustment> {
-        return Promise.resolve({
-            damageAdjustment: new Cost(0, 0, false, true).asModifier(),
-            costBase: new Cost(1, 0, false).asPrimaryCost(),
-            costBaseChanged: false,
-            operationCancelled: false
-        });
-    }
+    public totalFromImplements: CostModifier = new Cost(0, 0, false).asModifier();
 
 }

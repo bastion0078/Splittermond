@@ -2,7 +2,6 @@ import {SplittermondChatCard} from "../SplittermondChatCard";
 import {foundryApi} from "../../../api/foundryApi";
 import {DamageEvent, DamageImplement} from "../../damage/DamageEvent";
 import {AgentReference} from "../../../data/references/AgentReference";
-import {Cost} from "../../costs/Cost";
 import {DamageRoll} from "../../damage/DamageRoll";
 import {DamageType} from "../../../config/damageTypes";
 import {parseFeatureString} from "../../damage/featureParser";
@@ -10,6 +9,7 @@ import {DamageMessage} from "./DamageMessage";
 import {Roll, sumRolls} from "../../../api/Roll";
 import {DamageFeature} from "../../damage/DamageFeature";
 import SplittermondActor from "../../../actor/actor";
+import {toCost} from "../../costs/costTypes";
 
 interface ProtoDamageImplement {
     damageFormula: string;
@@ -67,13 +67,3 @@ async function rollDamages(damages: ProtoDamageImplement[]) {
     return {totalRoll: sumRolls(allRolls),features: allFeature, damageImplements};
 }
 
-function toCost(damageType: 'K' | 'V' | "") {
-    switch (damageType) {
-        case 'K':
-            return new Cost(1, 0, true, true).asPrimaryCost()
-        case 'V':
-            return new Cost(0, 1, false, true).asPrimaryCost()
-        case "":
-            return new Cost(1, 0, false, true).asPrimaryCost();
-    }
-}
