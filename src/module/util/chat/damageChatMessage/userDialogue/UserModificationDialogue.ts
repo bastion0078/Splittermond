@@ -1,12 +1,12 @@
-import {DialogV2ConstructorInput, DialogV2RenderOptions, FoundryDialog} from "../../../api/Dialog";
-import {foundryApi} from "../../../api/foundryApi";
+import {DialogV2ConstructorInput, DialogV2RenderOptions, FoundryDialog} from "../../../../api/Dialog";
+import {foundryApi} from "../../../../api/foundryApi";
 import {UserReport} from "./UserReporterImpl";
-import {Renderer} from "./userDialogue/Renderer";
-import {CostType, fromCost, isCostType, toCost} from "../../costs/costTypes";
-import {CostModifier} from "../../costs/Cost";
-import {PrimaryCost} from "../../costs/PrimaryCost";
-import {settings} from "../../../settings";
-import SplittermondActor from "../../../actor/actor";
+import {Renderer} from "./Renderer";
+import {CostType, fromCost, isCostType, toCost} from "../../../costs/costTypes";
+import {CostModifier} from "../../../costs/Cost";
+import {PrimaryCost} from "../../../costs/PrimaryCost";
+import {settings} from "../../../../settings";
+import SplittermondActor from "../../../../actor/actor";
 
 let displayDamageDialogue: Awaited<ReturnType<typeof settings.registerString>> = {
     get: () => "once", set: () => {

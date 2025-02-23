@@ -1,9 +1,9 @@
-import {Cost, CostModifier} from "../../costs/Cost";
-import {DamageType} from "../../../config/damageTypes";
-import {UserReporter} from "../../damage/calculateDamageOnTarget";
-import SplittermondActor from "../../../actor/actor";
-import {AgentReference} from "../../../data/references/AgentReference";
-import {PrimaryCost} from "../../costs/PrimaryCost";
+import {Cost, CostModifier} from "../../../costs/Cost";
+import {DamageType} from "../../../../config/damageTypes";
+import {UserReporter} from "../../../damage/calculateDamageOnTarget";
+import SplittermondActor from "../../../../actor/actor";
+import {AgentReference} from "../../../../data/references/AgentReference";
+import {PrimaryCost} from "../../../costs/PrimaryCost";
 
 
 export interface ProtoUserAdjustment {

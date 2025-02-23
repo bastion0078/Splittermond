@@ -1,5 +1,5 @@
 import {foundryApi} from "../../../../api/foundryApi";
-import {UserReport, UserReportRecord} from "../UserReporterImpl";
+import {UserReport, UserReportRecord} from "./UserReporterImpl";
 import {CostType, fromCost} from "../../../costs/costTypes";
 import {PrimaryCost} from "../../../costs/PrimaryCost";
 

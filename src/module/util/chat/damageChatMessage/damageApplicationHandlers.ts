@@ -1,9 +1,9 @@
 import {DamageEvent} from "../../damage/DamageEvent";
 import {foundryApi} from "../../../api/foundryApi";
-import {UserModificationDialogue} from "./UserModificationDialogue";
+import {UserModificationDialogue} from "./userDialogue/UserModificationDialogue";
 import {calculateDamageOnTarget} from "../../damage/calculateDamageOnTarget";
 import {referencesUtils} from "../../../data/references/referencesUtils";
-import {UserReporterImpl} from "./UserReporterImpl";
+import {UserReporterImpl} from "./userDialogue/UserReporterImpl";
 import {PrimaryCost} from "../../costs/PrimaryCost";
 import SplittermondActor from "../../../actor/actor";
 
