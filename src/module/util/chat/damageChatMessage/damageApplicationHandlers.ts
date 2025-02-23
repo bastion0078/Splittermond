@@ -18,17 +18,17 @@ export async function applyDamageToSelf(event: DamageEvent) {
     const userReporter = new UserReporterImpl();
 
     calculateDamageOnTarget(event, target, userReporter);
-    await userModifier.getUserAdjustedDamage(userReporter.getReport()).then((userAdjustedDamage) => {
-        applyDamage(target, userAdjustedDamage,
-            {
-                sourceName: event.causer?.getAgent().name ?? '',
-                principalImplement: [...event.implements]
-                    .sort((a,b)=> a.damage-b.damage)[0]
-                    .implementName
-            });
-    });
-
-
+    const result = await userModifier.getUserAdjustedDamage(userReporter.getReport())
+    if (result == "Aborted") {
+        return;
+    }
+    applyDamage(target, result,
+        {
+            sourceName: event.causer?.getAgent().name ?? '',
+            principalImplement: [...event.implements]
+                .sort((a, b) => a.damage - b.damage)[0]
+                .implementName
+        });
 }
 
 function findUserActor() {
