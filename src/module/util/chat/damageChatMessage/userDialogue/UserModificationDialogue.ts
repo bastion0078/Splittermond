@@ -28,11 +28,13 @@ export class UserModificationDialogue {
     private storedCostBase: PrimaryCost = toCost("V").subtract(this.storedCostVector);
     private costBaseChanged: boolean = false;
     private showNext: boolean = displayDamageDialogue.get() !== "never";
+    private cancelled: boolean = false;
 
 
-    async getUserAdjustedDamage(userReport: UserReport): Promise<PrimaryCost|"Aborted"> {
+    async getUserAdjustedDamage(userReport: UserReport): Promise<PrimaryCost | "Aborted"> {
         if (!this.showNext) {
-            return Promise.resolve(this.calculateNewDamage(userReport.totalDamage, this.storedUserAdjustment));
+            return this.cancelled ? "Aborted" :
+                this.calculateNewDamage(userReport.totalDamage, this.storedUserAdjustment);
         }
 
         const userResult = await this.showNextDialog(userReport)
@@ -52,17 +54,19 @@ export class UserModificationDialogue {
     private handleUserCancelAction() {
         this.showNext = false;
         this.storedUserAdjustment = CostModifier.zero;
+        this.cancelled = true;
         return "Aborted" as const
     }
 
-    private handleUserApplicationAction(userResult: UserAdjustments,userReport: UserReport) {
+    private handleUserApplicationAction(userResult: UserAdjustments, userReport: UserReport) {
         this.storedCostBase = userReport.event.costBase;
-        if (fromCost(this.storedCostBase)[0] !== userResult.costBase) {
+        if (fromCost(this.storedCostBase.add(this.storedCostVector))[0] !== userResult.costBase) {
             this.costBaseChanged = true;
+
         }
         this.storedCostVector = toCost(userResult.costBase).toModifier(true);
         this.storedCostBase = toCost(userResult.costBase).subtract(this.storedCostVector);
-        const adjustmentToStore = userResult.damageAdjustment + userResult.splinterpointBonus
+        const adjustmentToStore = userResult.damageAdjustment - userResult.splinterpointBonus
         const adjustmentToUse = this.storedCostBase.add(this.storedCostVector).toModifier(true).multiply(userResult.damageAdjustment);
         this.storedUserAdjustment = this.storedCostBase.add(this.storedCostVector).toModifier(true).multiply(adjustmentToStore);
         return this.calculateNewDamage(userReport.totalDamage, adjustmentToUse);
@@ -83,6 +87,7 @@ export class UserModificationDialogue {
         const newVector = this.costBaseChanged ? this.storedCostVector.multiply(newDamage.length) : newDamage
         return this.storedCostBase.add(newVector);
     }
+
 
 }
 

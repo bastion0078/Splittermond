@@ -111,7 +111,11 @@ global.foundry = {
     },
     applications:{
         api:{
-            DialogV2: class {}
+            DialogV2: class {
+                render(){};
+                addEventListener(){};
+                close(){};
+            }
         }
     }
 };

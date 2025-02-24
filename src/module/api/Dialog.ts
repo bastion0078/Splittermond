@@ -93,7 +93,8 @@ declare namespace foundry {
 
                 render(options?: DialogV2RenderOptions): Promise<this>;
 
-                addEventListener(type: "close", listerner: (event: Event) => void): void;
+                addEventListener(type: "close", listener: (event: Event) => void): void;
+                close():void;
             }
         }
     }
