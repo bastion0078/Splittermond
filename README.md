@@ -4,7 +4,7 @@ Dieses Foundry VTT - System implementiert das deutsche Rollenspiel-System [Split
 
 *Dieses System befindet sich noch in Entwicklung. Änderungen können jederzeit vorgenommen werden, die eine Abwärtskompatibilität beeinträchtigen.*
 
-**Installations-URL:** [https://bitbucket.org/rpgframework-cloud/splittermond-fvtt/raw/main/system.json](https://bitbucket.org/rpgframework-cloud/splittermond-fvtt/raw/main/system.json)
+**Installations-URL:**  [https://github.com/SplittermondFoundry/Splittermond/blob/main/public/system.json](https://github.com/SplittermondFoundry/Splittermond/blob/main/public/system.json)
 
 ![Screenshot](screenshots/character-sheet-general.png)
 
