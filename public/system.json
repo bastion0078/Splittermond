@@ -245,7 +245,7 @@
     "verified": 12.333,
     "maximum": 12
   },
-  "url": "https://github.com/SplittermondFoundry/splittermond",
-  "manifest": "https://raw.githubusercontent.com/SplittermondFoundry/Splittermond/main/public/system.json",
-  "download": "https://github.com/SplittermondFoundry/Splittermond/releases/download/v0.12.10/splittermond-0.12.10.zip"
+  "url": "https://github.com/bastion0078/Splittermond/",
+  "manifest": "https://raw.githubusercontent.com/bastion0078/Splittermond/main/public/system.json",
+  "download": "https://github.com/bastion0078/Splittermond/releases/download/v0.12.10b/splittermond-0.12.10b.zip"
 }
