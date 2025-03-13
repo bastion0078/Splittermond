@@ -40,6 +40,7 @@ export const expected = {
         costs: "K16V4",
         damage:null,
         damageType:null,
+        costType:null,
         effectArea: null,
         features: null,
         skill: null,

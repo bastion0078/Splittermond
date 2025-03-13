@@ -8,7 +8,6 @@ import SplittermondWeaponSheet from "./module/item/sheets/weapon-sheet.js";
 import SplittermondShieldSheet from "./module/item/sheets/shield-sheet.js";
 import SplittermondArmorSheet from "./module/item/sheets/armor-sheet.js";
 import SplittermondAttackSheet from "./module/item/sheets/attack-sheet.js";
-import ApplyDamageDialog from "./module/apps/dialog/apply-damage-dialog.js";
 import {splittermond} from "./module/config.js";
 import * as Dice from "./module/util/dice.js"
 import * as Macros from "./module/util/macros.js"
@@ -39,6 +38,7 @@ import {CharacterDataModel} from "./module/actor/dataModel/CharacterDataModel";
 import {NpcDataModel} from "./module/actor/dataModel/NpcDataModel";
 import {initializeItem} from "./module/item";
 import {DamageInitializer} from "./module/util/chat/damageChatMessage/initDamage";
+import {CostBase} from "./module/util/costs/costTypes.js";
 
 
 $.fn.closestData = function (dataName, defaultValue = "") {
@@ -516,9 +516,10 @@ Hooks.on('renderChatMessage', function (app, html, data) {
             const damageFormula = $(event.currentTarget).closestData("damageformula");
             const featureString = $(event.currentTarget).closestData("featurestring");
             const damageSource = $(event.currentTarget).closestData("damagesource");
-            const damageType= $(event.currentTarget).closestData("damagetype");
+            const damageType= $(event.currentTarget).closestData("damagetype") ?? "physical";
+            const costType = $(event.currentTarget).closestData("costtype") ?? "V";
             const actor = foundryApi.getActor(actorId) ?? null;//May fail if ID refers to a token
-            return DamageInitializer.rollDamage([{damageFormula, featureString, damageSource, damageType}],"V", actor)
+            return DamageInitializer.rollDamage([{damageFormula, featureString, damageSource, damageType}],CostBase.create(costType), actor)
                 .then(message => message.sendToChat());
         }
 

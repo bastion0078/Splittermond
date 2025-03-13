@@ -24,7 +24,7 @@ export interface DegreeOfSuccessOptionData {
 }
 
 export function isDegreeOfSuccessOptionData(data:unknown): data is DegreeOfSuccessOptionData {
-    return data instanceof Object && "action" in data && "multiplicity" in data;
+    return !!data && typeof data === "object" && "action" in data && "multiplicity" in data;
 }
 
 export interface DegreeOfSuccessAction {

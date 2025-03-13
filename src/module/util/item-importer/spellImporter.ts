@@ -117,6 +117,10 @@ export async function importSpell(spellName: string, rawData: string, folder: st
     if (damage) {
         spellData.system.damage = (damage[0] || "").trim();
         spellData.system.damageType = "physical";
+        spellData.system.costType = "V";
+    } else {
+        spellData.system.damageType = null;
+        spellData.system.costType = null;
     }
 
     const itemPromise = itemCreator.createSpell(spellData);

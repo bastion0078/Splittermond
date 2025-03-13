@@ -13,7 +13,7 @@ export function chatActionFeature() {
     foundryApi.hooks.once("init", () => {
         foundryApi.socket.on(socketEvent, (data) => {
 
-            if(!(data instanceof Object && "type" in data && "messageId" in data && "userId" in data)) {
+            if(!(data && typeof data === "object" && "type" in data && "messageId" in data && "userId" in data)) {
                 return Promise.resolve();
             }
             if (data.type === "chatAction") {
@@ -94,7 +94,7 @@ function prohibitActionOnChatCard(__:unknown, html:JQuery, data:unknown) {
 }
 
 function dataHasRequiredAttributes(data:unknown): data is { message:{speaker:object}, author:{id:string} } {
-    return data instanceof Object
-        && "message" in data && data.message instanceof Object && "speaker" in data.message
-        && "author" in data  && data.author instanceof Object && "id" in data.author;
+    return !!data && typeof data === "object"
+        && "message" in data && !!data.message && typeof (data.message) === "object" && "speaker" in data.message
+        && "author" in data  && !!data.author && typeof (data.author) === "object" && "id" in data.author;
 }

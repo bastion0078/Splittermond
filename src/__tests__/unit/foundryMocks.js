@@ -9,6 +9,14 @@ global.Application = class {
     }
 };
 
+global.Hooks = {
+    once(){},
+    on(){},
+    off(){},
+    callAll(){},
+    call(){},
+}
+
 global.Actor = class Actor{
     constructor(data, context) {
     }
@@ -106,6 +114,15 @@ global.foundry = {
              */
             toObject() {
                 return JSON.parse(JSON.stringify(this));
+            }
+        }
+    },
+    applications:{
+        api:{
+            DialogV2: class {
+                render(){};
+                addEventListener(){};
+                close(){};
             }
         }
     }

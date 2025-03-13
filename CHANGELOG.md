@@ -1,3 +1,47 @@
+## 0.12.12 HOTFIX##
+### Fixed
+* Verwundbarkeiten und Resistenzen werden nun korrekt bei der Schadensberechnung berücksichtigt
+  * Die Schlüsselwörter dafür sind 'weakness.<damage Type>' und 'resistance.<damage Type>'
+  * 'susceptibility' findet keine Anwendung mehr
+  * Beide Schlüsselwörter können positive und negative Werte annehmen. 
+    * Verwundbarkeiten werden dabe exponentiell gehandhabt: 
+      d.h "Verwundbarkeit 1 = "Schaden * 2", "Verwundbarkeit 2" = "Schaden * 4",
+    * Resistenzen sind linear = "Resizenz 2" = +2 Schaden, "Resistenz 3" = +3 Schaden
+ 
+### New Features
+* Das Rüstungsmerkmal Stabil wird nun berücksichtigt
+* Es gibt eine Option die Wirkung von 'Stabil' auf die Rüstung zu begrenzen, die das Merkmal trägt
+* Detaillierte Schadensreduktionsdaten via tooltip.
+## 0.12.11
+### Fixed
+* Hinzufügen von Mondzeichen Per Drag And Drop wenn es schon ein Mondzeichen gibt
+* Patzerdialoge tauchen nun bei dem Nutzr auf der den Wurf gemacht hat
+* Einen Fehler das manchmal das Auswählen von Zauberoptionen verhindert hat.
+* Beim Wiederholten Öffnen eines Items wird jetzt immer der übersetzete Text angezeigt.
+### New features
+* Überarbeitete Schadensberechnung
+  * Schadensberechnung beachtet jetzt Verwundbarkeiten und Schadensreduktion
+  * Waffenlose Angriffe verursachen jetzt Betäubungsschaden außer der Charakter hat "Natürliche Waffe"
+  * Mittels Hooks können Immunitäten eingestellt werden
+  * Betäubungsimmunität wird automatisch auf Betäubungsschaden angewendet
+  * Es gibt eine Einstellung mit der man anzeigen kann welche Schadensdialoge man sehen möchte
+* Verwundbarkeiten können über den modifikator 'susceptibility' hinzugefügt werden
+  * Der Importer erkennt Verwundbarkeiten und Resistenzen
+  * folgende Modifikatoren existieren:
+      "physical",
+      "mental",
+      "electric",
+      "acid",
+      "rock",
+      "fire",
+      "heat",
+      "cold",
+      "poison",
+      "light",
+      "shadow",
+      "bleeding",
+      "disease"
+
 ## 0.12.10 HOTFIX##
 ### Fixed
 * Hinzufügen von Mondzeichen Per Drag And Drop 

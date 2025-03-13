@@ -477,6 +477,9 @@ export default class ItemImporter {
             }
 
         }).join(", ");
+        if(itemData.system.features.includes("Stumpf")){
+            itemData.system.costType = "E";
+        }
 
         Item.create(itemData);
 

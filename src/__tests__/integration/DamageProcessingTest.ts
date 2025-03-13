@@ -2,12 +2,21 @@ import {DamageRoll} from "../../module/util/damage/DamageRoll";
 import {QuenchBatchContext} from "@ethaks/fvtt-quench";
 import {DamageMessage} from "../../module/util/chat/damageChatMessage/DamageMessage";
 import {DamageInitializer} from "../../module/util/chat/damageChatMessage/initDamage";
+import {foundryApi} from "../../module/api/foundryApi";
+import {
+    evaluateEventImmunities,
+    evaluateImplementImmunities, eventImmunityHook,
+    implementImmunityHook
+} from "../../module/util/damage/immunities";
+import {getActor} from "./fixtures";
+import {DamageEvent, DamageImplement} from "../../module/util/damage/DamageEvent";
+import {CostBase} from "../../module/util/costs/costTypes";
 
 declare class Die{
     results: any;
 }
 
-export function DamageRollTest(context:QuenchBatchContext) {
+export function DamageProcessingTest(context:QuenchBatchContext) {
     const {describe, it, expect} = context;
 
     describe("Damage Roll evaluation", () => {
@@ -71,6 +80,58 @@ export function DamageRollTest(context:QuenchBatchContext) {
             expect(damageMessage.damageEvent.implements.map(i => i.damageType)).to.contain.members(["physical","fire"]);
 
         });
-
     });
+
+    describe("Immunities", () =>{
+        const implement = new DamageImplement({damage:1,formula:"1d6",implementName:"Impl",damageType:"physical", damageExplanation:"", _baseReductionOverride:0});
+        const implementIds:number[] = [];
+        const eventIds:number[] = [];
+
+        afterEach(()=>{
+            implementIds.forEach(id => foundryApi.hooks.off(implementImmunityHook,id))
+            eventIds.forEach(id => foundryApi.hooks.off(eventImmunityHook,id))
+        });
+        it("should call the immunity handler for individual immunities", async () => {
+            const target = getActor(it);
+            const id = foundryApi.hooks.on(implementImmunityHook, (_,__,imms)=>{imms.push({name:"Test"})})
+            implementIds.push(id);
+
+            const immunity = evaluateImplementImmunities(implement,target)
+
+            expect(immunity).to.deep.equal({name:"Test"});
+        });
+
+        it("should return the first immunity", async () => {
+            const target = getActor(it);
+            const id1 = foundryApi.hooks.on(implementImmunityHook, (_,__,imms)=>{imms.push({name:"Test"})})
+            const id2 = foundryApi.hooks.on(implementImmunityHook, (_,__,imms)=>{imms.push({name:"Test2"})})
+            implementIds.push(id1,id2);
+
+            const immunity = evaluateImplementImmunities(implement,target)
+
+            expect(immunity).to.deep.equal({name:"Test"});
+        });
+
+        it("should call the immunity handler for event immunities", () => {
+            const target = getActor(it);
+            const event = new DamageEvent({causer:null, _costBase: CostBase.create("K"), formula:"1d6", tooltip:"", isGrazingHit:false, implements:[implement]});
+            const id = foundryApi.hooks.on(eventImmunityHook, (_,__,imms)=>{imms.push({name:"Test"})})
+            eventIds.push(id)
+
+            const immunity = evaluateEventImmunities(event,target)
+
+            expect(immunity).to.deep.equal({name:"Test"});
+        });
+
+        it("should return undefined for no handler", async () => {
+            const target = getActor(it);
+            const id = foundryApi.hooks.on(eventImmunityHook, (_,__,imms)=>{imms.push({name:"Test"})})
+            eventIds.push(id)
+
+            const immunity = evaluateImplementImmunities(implement,target)
+
+            expect(immunity).to.be.undefined;
+        });
+
+    })
 }

@@ -110,7 +110,7 @@ export class DamageActionHandler extends SplittermondDataModel<DamageActionHandl
                             damageSource: spell.name,
                             damageType: spell.system.damageType,
                         }],
-                        "V",
+                        spell.system.costType ?? "V",
                         this.actorReference.getAgent()
                     ).then((chatCard) => chatCard.sendToChat());
                 }

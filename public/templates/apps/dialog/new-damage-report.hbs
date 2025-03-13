@@ -1,0 +1,73 @@
+<div>
+    <div>
+        <table style="max-width: 300px">
+            <thead>
+            <tr>
+                <th>{{localize "splittermond.damageMessage.name"}}</th>
+                <th>{{localize "splittermond.damageMessage.type"}}</th>
+                <th>{{localize "splittermond.damageMessage.baseValue"}}</th>
+                <th>{{localize "splittermond.damageMessage.modifiedBy"}}</th>
+                <th>&sum;</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each items}}
+                <tr class="{{#if immunity}}immune-row{{/if}}" {{#if immunity}}data-immunity="{{immunity}}"{{/if}}>
+                    <td>{{name}}</td>
+                    <td>{{type}}</td>
+                    <td class="number-col">{{baseValue}}</td>
+                    <td class="number-col">{{modifiedBy}}</td>
+                    <td class="number-col">{{subTotal}}</td>
+                </tr>
+            {{/each}}
+            <tr>
+                <td colspan="4">{{localize "splittermond.damageMessage.subTotal"}}</td>
+                <td style="text-align: right;border-top: 1px solid black">{{totalBeforeGrazing}}</td>
+            </tr>
+            {{#if isGrazingHit}}
+                <tr>
+                    <td colspan="4">{{localize "splittermond.grazingHit"}}</td>
+                    <td>&divide;2</td>
+                </tr>
+            {{/if}}
+            <tr>
+                <td colspan="4" class="sr-tooltip-container">
+                    <span class="sr-tooltip">
+                        {{localize "splittermond.damageMessage.damageReduction"}}
+                        <span class="sr-tooltip-text">{{localize "splittermond.damageMessage.tooltip.base"}}: {{damageReduction}}, {{localize "splittermond.damageMessage.tooltip.ignored"}}: {{ignoredReduction}}</span>
+                    </span>
+                </td>
+                <td style="text-align: right">{{effectiveDamageReduction}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="properties-editor">
+        <label for="damageInput">{{localize "splittermond.damage"}}</label>
+        <div class="row">
+            <button class="button-inline" type="button" data-action="dec-value" data-input-query="input[name='damage']">
+                <i class="fa fa-minus" aria-hidden="true"></i></button>
+            <input style="width:80px" id="damageInput" name="damage" value="{{totalDamage}}" type="text">
+            <button class="button-inline" type="button" data-action="inc-value" data-input-query="input[name='damage']">
+                <i class="fa fa-plus" aria-hidden="true"></i></button>
+            <button class="button-inline" type="button" data-action="half-value"
+                    data-input-query="input[name='damage']">
+                &frac12;
+            </button>
+        </div>
+        <label>{{localize "splittermond.damageCategory"}}</label>
+        <select id="costTypeSelect" name="costTypeSelect" style="max-width: 150px">
+            <option value="V"{{#if (eq type "V")}} selected{{/if}}>{{localize "splittermond.normalDamage"}}</option>
+            <option value=""{{#if (eq type "E")}} selected{{/if}}>{{localize "splittermond.stunDamage"}}</option>
+            <option value="K"{{#if (eq type "K")}} selected{{/if}}>{{localize
+                    "splittermond.channeledDamage"}}</option>
+        </select>
+    </div>
+    {{#if displaySplinterpoints}}
+        <button class="dialog-buttons" data-action="useSplinterpoint">
+            <div style="display: flex; justify-content: center; align-items: center;max-width: 50%">
+                <i class="fas fa-moon"></i>&nbsp;{{localize "splittermond.splinterpoint"}}
+            </div>
+        </button>
+    {{/if}}
+</div>

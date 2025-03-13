@@ -50,7 +50,7 @@ export default class SplittermondItemSheet extends ItemSheet {
          * @type {{cssClass:string, editable:any, document: ClientDocument, data: any, limited: any, options: any, owner: any,title: string, type: string}}
          */
         const data = super.getData();
-        data.itemProperties = this._getItemProperties();
+        data.itemProperties = await this._getItemProperties();
         data.statBlock = this._getStatBlock();
         data.typeLabel = "splittermond." + data.data.type;
 
@@ -62,22 +62,34 @@ export default class SplittermondItemSheet extends ItemSheet {
      * @returns {!SplittermondItemSheetProperties}
      * @private
      */
-    _getItemProperties() {
+    async _getItemProperties() {
         /**
          * @type SplittermondItemSheetProperties
          */
+        const promisesToAwait =[];
         let sheetProperties = duplicate(this.itemSheetProperties);
         sheetProperties.forEach(grp => {
             grp.properties.forEach(async /** @type {InputItemProperty|ItemSheetPropertyDisplayProperty}*/prop => {
                 prop.value = this.propertyResolver.getProperty(this.item, prop.field);
+                if (prop.value === undefined) {
+                    prop.value = "undefined";
+                }
+                if(prop.value === null) {
+                    prop.value = "null";
+                }
                 prop.placeholderText = prop.placeholderText ?? prop.label;
                 if (prop.help) {
-                    prop.help = await this.textEditor.enrichHTML(this.localizer.localize(prop.help));
+                    const  promisedHelp = this.textEditor.enrichHTML(this.localizer.localize(prop.help));
+                    //Push promises first. Else, they will have ceased to exist.
+                    promisesToAwait.push(promisedHelp);
+                    prop.help = await promisedHelp
                 }
             });
         });
-
-        return sheetProperties;
+        //We await the promises in ther foreach function but we don't return properties, so the outermost function
+        //has no way of knowing that stuff needs to be awaited. So we await the promises here and return the properties
+        await Promise.all(promisesToAwait);
+        return sheetProperties
     }
 
     _getStatBlock() {

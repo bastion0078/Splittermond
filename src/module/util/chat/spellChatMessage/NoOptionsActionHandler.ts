@@ -12,7 +12,6 @@ import {configureUseAction} from "./commonAlgorithms/defaultUseActionAlgorithm";
 
 function NoOptionsActionHandlerSchema() {
     return {
-        rollFumbleUsed: new fields.BooleanField({required: true, nullable: false, initial: false}),
         checkReportReference: new fields.EmbeddedDataField(OnAncestorReference<CheckReport>, {
             required: true,
             nullable: false
@@ -32,7 +31,6 @@ export class NoOptionsActionHandler extends SplittermondDataModel<NoOptionsActio
 
     static initialize(checkReportReference: OnAncestorReference<CheckReport>, spellReference: ItemReference<SplittermondSpellItem>, casterReference: AgentReference): NoOptionsActionHandler {
         return new NoOptionsActionHandler({
-            rollFumbleUsed: false,
             checkReportReference,
             spellReference,
             casterReference
@@ -46,8 +44,8 @@ export class NoOptionsActionHandler extends SplittermondDataModel<NoOptionsActio
         if (this.checkReportReference.get().isFumble) {
             actions.push(
                 {
+                    disabled: false, //Local actions cannot have their state managed because they don't allow updates.
                     type: "rollMagicFumble",
-                    disabled: this.rollFumbleUsed,
                     isLocal: false,
                 })
         }
@@ -82,11 +80,10 @@ export class NoOptionsActionHandler extends SplittermondDataModel<NoOptionsActio
 
     rollFumble(actionData: ActionInput) {
         return configureUseAction()
-            .withUsed(() => this.rollFumbleUsed)
+            .withUsed(() => false)
             .withHandlesActions(["rollMagicFumble"])
             .withIsOptionEvaluator(() => this.checkReportReference.get().isFumble)
             .whenAllChecksPassed(() => {
-                this.updateSource({rollFumbleUsed: true});
                 const eg = -this.checkReportReference.get().degreeOfSuccess
                 const costs = this.spellReference.getItem().costs
                 const skill = this.checkReportReference.get().skill.id;

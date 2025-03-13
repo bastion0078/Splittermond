@@ -14,9 +14,11 @@ import {initializeSpellCostManagement} from "../util/costs/spellCostManagement.t
 import {settings} from "../settings";
 import {splittermond} from "../config.js";
 import {foundryApi} from "../api/foundryApi";
+import {Susceptibilities} from "./modifiers/Susceptibilities.js";
 
 /** @type ()=>number */
 let getHeroLevelMultiplier = () => 1;
+let getStableProtectsAllReduction = () => true;
 
 /**@return number[]*/
 export function calculateHeroLevels() {
@@ -26,8 +28,15 @@ export function calculateHeroLevels() {
 }
 
 
+settings.registerBoolean("stableProtectsAllReduction", {
+    position: 7,
+    scope: "world",
+    config: true,
+    default: true,
+}).then(accessor => getStableProtectsAllReduction = accessor.get);
+
 settings.registerNumber("HGMultiplier", {
-    position:1,
+    position: 1,
     scope: "world",
     config: true,
     default: 1.0,
@@ -49,6 +58,9 @@ settings.registerNumber("HGMultiplier", {
 
 export default class SplittermondActor extends Actor {
 
+    _resistances = new Susceptibilities("resistance", new ModifierManager());//dummy empty resistances
+    _weaknesses= new Susceptibilities("weakness", new ModifierManager());//dummy empty weaknesses
+
     actorData() {
         return this.system;
     }
@@ -60,6 +72,8 @@ export default class SplittermondActor extends Actor {
         //console.log(`prepareBaseData() - ${this.type}: ${this.name}`);/a
         super.prepareBaseData();
         this.modifier = new ModifierManager();
+        this._resistances = new Susceptibilities("resistance", this.modifier);
+        this._weaknesses = new Susceptibilities("weakness", this.modifier);
 
         if (!this.attributes) {
             this.attributes = CONFIG.splittermond.attributes.reduce((obj, id) => {
@@ -184,9 +198,9 @@ export default class SplittermondActor extends Actor {
         return this.type === "npc" ? 6 : this.system.experience.heroLevel + 2 + this.modifier.value("bonuscap");
     }
 
-    /**@return {{value:number, max:number}|undefined}*/
+    /**@return {{value:number, max:number}}*/
     get splinterpoints() {
-        return this.system.splinterpoints;
+        return this.system.splinterpoints ?? {value: 0, max: 0};
     }
 
     prepareEmbeddedDocuments() {
@@ -358,6 +372,7 @@ export default class SplittermondActor extends Actor {
 
     _prepareAttacks() {
         const attacks = this.attacks || [];
+        const isInjuring = this.items.find(i => i.name ==="Natürliche Waffe");
         if (this.type === "character") {
             attacks.push(new Attack(this, {
                 id: "weaponless",
@@ -367,8 +382,10 @@ export default class SplittermondActor extends Actor {
                 attribute1: "agility",
                 attribute2: "strength",
                 weaponSpeed: 5,
-                features: "Entwaffnend 1, Stumpf, Umklammern",
-                damage: "1W6"
+                features: ["Entwaffnend 1", "Umklammern",...(isInjuring ? []:["Stumpf"])].join(", "),
+                damage: "1W6",
+                damageType: "physical",
+                costType: isInjuring ? "V" : "E"
             }));
         }
     }
@@ -578,13 +595,47 @@ export default class SplittermondActor extends Actor {
         return this.modifier.value("damagereduction");
     }
 
-    async importFromJSON(json,updateActor) {
+    /**
+     * Under certain circumstances the actor can be protected against overriding damage reduction. This value represents the protected amount
+     * @return {number} The actor's protected damage reduction
+     */
+    get protectedDamageReduction(){
+        const itemsWithProtection = this.items
+            .filter(i => i.system.features?.toLowerCase().includes("stabil"))
+            .filter(i => i.system.equipped ?? false)
+        if(itemsWithProtection.length ===0){
+            return 0;
+        }else if (getStableProtectsAllReduction()){
+            return this.damageReduction;
+        }else {
+            return itemsWithProtection.reduce((acc, item) => acc + item.system.damageReduction, 0);
+        }
+    }
+
+    /**
+     * @return {Record<DamageType, number>} The actor's linear resistance for each damage type. Positive values indicate a resistance,
+     * negative values (not actually in the ruleset) indicate a weakness.
+     */
+    get resistances() {
+        return this._resistances.calculateSusceptibilities();
+    }
+
+    /**
+     * @return {Record<DamageType, number>} The actor's linear resistance for each damage type. Positive values indicate a resistance,
+     * negative values (not actually in the ruleset) indicate a weakness.
+     */
+    get weaknesses() {
+        return this._weaknesses.calculateSusceptibilities();
+    }
+
+
+    async importFromJSON(json, updateActor) {
         const data = JSON.parse(json);
 
         // If Genesis-JSON-Export
         if (data.jsonExporterVersion && data.system === "SPLITTERMOND") {
             updateActor = updateActor ?? await askUserAboutActorOverwrite();
-            const importedGenesisData = await this.#importGenesisData(data,updateActor);
+            const importedGenesisData = await this.#importGenesisData(data, updateActor);
             json = JSON.stringify(importedGenesisData);
         }
 
@@ -886,7 +937,6 @@ export default class SplittermondActor extends Actor {
         }
 
 
-
         if (updateActor) {
             let updateItems = [];
 
@@ -936,11 +986,15 @@ export default class SplittermondActor extends Actor {
     }
 
     /**
-     * This is a stub
+     * This is a stub. It currently returns the flat upgrade value for health and skills.
+     * Later it should check for specific masteries that increase the bonus values.
      * @param {SplittermondSkill} skillName
      * @return {number}
      */
     #getSplinterpointBonus(skillName) {
+        if(skillName === "health"){
+            return 5;
+        }
         return 3;
     }
 
@@ -1419,7 +1473,7 @@ export default class SplittermondActor extends Actor {
 /**
  * @returns {Promise<boolean>}
  */
-async function askUserAboutActorOverwrite(){
+async function askUserAboutActorOverwrite() {
     return new Promise((resolve) => {
         let dialog = new Dialog({
             title: "Import",

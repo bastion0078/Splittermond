@@ -28,6 +28,7 @@ export const expected  = {
         castDuration: "9 Ticks",
         damage: "5W6",
         damageType: "physical",
+        costType: "V",
         description: "O feiticeiro alcancea seu arvore com uma toca doce e nao faz 5W6 Punkte Schaden. Schadensreduktion wirkt hier nicht wenn der Gegner ein Token ist. Das Ziel isst für 30 Ticks den Zustand Erschöpft 2.",
         effectArea: null,
         effectDuration: null,

@@ -124,7 +124,6 @@ export const expected = {
             type: "Feenwesen, Magisches Wesen III, Naturwesen, Pflanze",
         },
     items:[
-        //Technicall, 'Körper' is not a weapon, but an NPC Attack. Our Compendium Mock makes the importer think it is a weapon.
         {
             img: "icons/svg/sword.svg",
             name: "Körper",

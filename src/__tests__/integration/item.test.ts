@@ -66,6 +66,7 @@ export function itemTest(this:any, context: QuenchBatchContext) {
                     description: "abc",
                     damage: "500d10+200",
                     damageType: "physical",
+                    costType: "V",
                     effectArea: "50km²",
                     enhancementDescription: "Obliterates everything",
                     enhancementCosts: "1",

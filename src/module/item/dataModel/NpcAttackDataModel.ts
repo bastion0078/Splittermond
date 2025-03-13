@@ -1,13 +1,12 @@
 import { DataModelSchemaType, SplittermondDataModel } from "../../data/SplittermondDataModel";
 import { fields } from "../../data/SplittermondDataModel";
 import SplittermondNpcAttackItem from "../npcattack";
-import {damageType, getDescriptorFields} from "./commonFields";
+import {damage, getDescriptorFields} from "./commonFields";
 
 function ItemNpcAttackDataModelSchema() {
     return {
         ...getDescriptorFields(),
-        damage: new fields.StringField({ required: true, nullable: true }),
-        ...damageType(),
+        ...damage(),
         range: new fields.NumberField({ required: true, nullable: true, initial: 0 }),
         weaponSpeed: new fields.NumberField({ required: true, nullable: true, initial: 0 }),
         skillValue: new fields.NumberField({ required: true, nullable: true, initial: 0 }),

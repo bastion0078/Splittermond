@@ -2,7 +2,7 @@ import {compendiumBrowserTest} from "./compendium-browser.test";
 import {itemTest} from "./item.test";
 import {chatActionFeatureTest} from "./chatActionFeature.test";
 import {dataModelTest} from "./api/dataModel.test";
-import {DamageRollTest} from "./DamageRoll.test";
+import {DamageProcessingTest} from "./DamageProcessingTest";
 import {foundryTypeDeclarationsTest} from "./api/foundryTypes.test";
 import {mergeObjectTest} from "./mergeObject.test";
 import {actorTest} from "./actor.test";
@@ -19,7 +19,7 @@ function registerQuenchTests(quench: Quench) {
     quench.registerBatch("splittermond.actor", actorTest)
     quench.registerBatch("splittermond.chatSystem", chatActionFeatureTest);
     quench.registerBatch("splittermond.dataModel", dataModelTest);
-    quench.registerBatch("splittermond.damageRoll", DamageRollTest);
+    quench.registerBatch("splittermond.damageProcessing", DamageProcessingTest);
     quench.registerBatch("splittermond.foundryTypes", foundryTypeDeclarationsTest);
     quench.registerBatch("splittermond.mergeObjects", mergeObjectTest);
     quench.registerBatch("splittermond.SettingsModule", settingsTest);

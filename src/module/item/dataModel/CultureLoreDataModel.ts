@@ -2,6 +2,7 @@ import {DataModelSchemaType, SplittermondDataModel} from "../../data/Splittermon
 import { fields } from "../../data/SplittermondDataModel";
 import {getDescriptorFields} from "./commonFields";
 import SplittermondItem from "../item";
+import {migrateFrom0_12_10} from "./migrations";
 
 function CultureLoreDataModelSchema() {
     return {
@@ -14,4 +15,9 @@ export type CultureLoreDataModelType = DataModelSchemaType<typeof CultureLoreDat
 
 export class CultureLoreDataModel extends SplittermondDataModel<CultureLoreDataModelType, SplittermondItem> {
     static defineSchema = CultureLoreDataModelSchema;
+
+    static migrateData(source:unknown){
+        source = migrateFrom0_12_10(source);
+        return super.migrateData(source);
+    }
 }

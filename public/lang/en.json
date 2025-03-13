@@ -1,5 +1,7 @@
 {
   "splittermond": {
+    "damageType": "damage type",
+    "damageCategory": "damage category",
     "unknownError":"An unknown error occurred. Please file a bug report.",
     "chatCard": {
       "noGMConnected": "Action cannot be performed, because no authorized user (GM) is connected",
@@ -8,7 +10,37 @@
       "spellMessage": {
         "noHandler": "No handler registered for action '{action}'. Please contact the developer.",
         "tooManyHandlers": "More than one handler registered for action '{action}'. Please contact the developer"
+      },
+      "damageMessage": {
+        "applyToTargets": "Apply to targets",
+        "applyToSelf": "Apply to self",
+        "applyToUserTargets": "Apply to {user}'s targets",
+        "noActorFound": "Found no actor to route damage to",
+        "noUserFound": "No user found for {actor}",
+        "youHaveNoTargets": "You have no targets selected",
+        "noUserTargetsFound": "User {user} has no targets selected.",
+        "noTargetsFound": "Could not find targets for Damage",
+        "consumptionMessage":"{principalImplement} by {sourceName}"
       }
+    },
+    "damageMessage": {
+      "title": "{attacker} deals damage to {defender} ",
+      "name": "Mean",
+      "type": "damage type",
+      "baseValue": "causes damage",
+      "modifiedBy": "by weakness",
+      "subTotal": "sub total",
+      "damageReduction": "damage reduction",
+      "damageReductionOverride": "ignored",
+      "displaySettings": {
+        "once": "First one only",
+        "never": "Never",
+        "always": "Always"
+      },
+      "skip": "Skip",
+      "tooltip": {
+        "base": "DR",
+        "ignored": "ignoring"
     },
     "message": {
       "itemImported": "The item \"{name}\" was imported as \"{type}\"!",
@@ -22,6 +54,19 @@
       "HGMultiplier": {
         "name": "Hero level multiplier",
         "hint": "Multiplier for calculating skill points and attribute modifiers."
+      },
+      "displayDamageDialog": {
+        "name": "Show damage dialog",
+        "hint": "Displays a dialog to review the damage applied to target",
+        "options": {
+          "once": "First target only",
+          "never": "Never",
+          "always": "Always"
+        }
+      },
+      "stableProtectsAllReduction": {
+        "name": "Feature 'stable' nullifies all 'Piercing' features",
+        "hint": "If an armor with feature 'stable' is attacked by a piercing weapon, then the effect of 'piercing' on the entire damage reduction is negated. If this option is deactivated, this effect only applies to the damage reduction provided by the armor with the feature.",
       }
     },
     "damageTypes": {
@@ -36,7 +81,9 @@
         "cold": "cold",
         "poison": "poison",
         "bleeding": "bleed",
-        "disease": "disease"
+        "disease": "disease",
+        "light": "light",
+        "shadow": "shadow"
       },
       "long": {
         "physical": "pyhsical damage",
@@ -49,7 +96,9 @@
         "cold": "cold damage",
         "poison": "poison damage",
         "bleeding": "bleeding damage",
-        "disease": "disease damage"
+        "disease": "disease damage",
+        "light": "light damage",
+        "shadow": "shadow damage"
       }
     }
   }

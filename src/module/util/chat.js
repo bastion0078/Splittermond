@@ -97,7 +97,8 @@ export async function prepareCheckMessageData(actor, rollMode, roll, data) {
                         damageFormula: data.weapon.damage,
                         featureString: data.weapon.features,
                         damageSource: data.weapon.name,
-                        damageType: data.weapon.damageType
+                        damageType: data.weapon.damageType,
+                        costType: data.weapon.costType
                     }
                 });
             }

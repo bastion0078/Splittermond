@@ -35,6 +35,11 @@ export interface User {
     isGM: boolean;
     id: string;
     active: boolean;
+    name:string;
+    get targets(): {user:User, size:number} & Iterable<Token>;
+    get character(): Actor|null;
+    /** @internal*/
+    set character(actor: Actor|null);
 }
 
 export interface Socket {
@@ -46,6 +51,8 @@ export interface Hooks {
     once: (key: string, callback: (...args: any[]) => void) => number;
     on: ((key: string, callback: (...args: any[]) => void) => number);
     off: (key: string, id: number) => void;
+    callAll(key: string, ...args: any[]): boolean;
+    call(key: string, ...args: any[]): boolean;
 }
 
 export type SettingTypeMapper<T extends SettingTypes> = T extends typeof Number ? number:T extends typeof Boolean?boolean:T extends typeof String?string:never;
@@ -71,6 +78,7 @@ declare global {
         name:string;
         items: Collection<Item>
         system: Record<string, any>
+        owner: User
     }
 
     class Item extends FoundryDocument {
@@ -78,6 +86,12 @@ declare global {
         name: string;
         type: string;
         system: Record<string, any>
+    }
+
+    class Token{
+        constructor(...args:any[]);
+
+        document: TokenDocument;
     }
 
     class TokenDocument extends FoundryDocument {
@@ -95,6 +109,8 @@ declare global {
         updateSource(data: object): void;
 
         prepareBaseData(): void;
+
+        static deleteDocuments(documentId: string[]): Promise<void>
 
         /**
          * Computation of values that are not put to the database

@@ -97,7 +97,7 @@ export class SplittermondChatCard extends SplittermondChatCardModel {
  */
 export async function handleChatAction(data: unknown, messageId: string): Promise<void> {
     const chatCard = getChatCard(messageId);
-    const isObjectWithAction = data instanceof Object && "action" in data
+    const isObjectWithAction = data && typeof data === "object" && "action" in data
 
     if (isObjectWithAction && canBeKey(data.action)) {
         await chatCard.message.handleGenericAction({...data, action: data.action})
@@ -110,7 +110,7 @@ export async function handleChatAction(data: unknown, messageId: string): Promis
 
 export async function handleLocalChatAction(data: unknown, messageId: string) {
     const chatCard = getChatCard(messageId);
-    const isObjectWithAction = data instanceof Object && "localaction" in data
+    const isObjectWithAction = data && typeof data === "object" && "localaction" in data
     if (isObjectWithAction && canBeKey(data.localaction)) {
         return chatCard.message.handleGenericAction({...data, action: data.localaction})
             .catch(() => throwNoActionError(chatCard, data, messageId))

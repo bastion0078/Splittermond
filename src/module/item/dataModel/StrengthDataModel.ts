@@ -1,6 +1,7 @@
 import { DataModelSchemaType, SplittermondDataModel } from "../../data/SplittermondDataModel";
 import { fields } from "../../data/SplittermondDataModel";
 import SplittermondItem from "../item";
+import {migrateFrom0_12_10} from "./migrations";
 
 function ItemStrengthDataModelSchema() {
     return {
@@ -19,4 +20,9 @@ export type StrengthDataModelType = DataModelSchemaType<typeof ItemStrengthDataM
 
 export class StrengthDataModel extends SplittermondDataModel<StrengthDataModelType, SplittermondItem> {
     static defineSchema = ItemStrengthDataModelSchema;
+
+    static migrateData(source:unknown){
+        source = migrateFrom0_12_10(source);
+        return super.migrateData(source);
+    }
 }

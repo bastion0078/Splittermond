@@ -10,7 +10,7 @@ import {rollType} from "./config/RollType";
 import {splittermondSpellEnhancement} from "./config/SplittermondSpellEnhancements";
 import {modifiers} from "./config/modifiers";
 import {skillGroups} from "./config/skillGroups";
-import {damageTypes} from "./config/damageTypes";
+import {damageTypeOptions, damageTypes} from "./config/damageTypes";
 
 export const splittermond = {};
 
@@ -180,6 +180,12 @@ splittermond.attributeOptions = {
     strength: "splittermond.attribute.strength.long",
     mind: "splittermond.attribute.mind.long",
     willpower: "splittermond.attribute.willpower.long",
+};
+
+splittermond.costTypeOptions = {
+    "V": "splittermond.normalDamage",
+    "E": "splittermond.stunDamage",
+    "K": "splittermond.channeledDamage",
 };
 
 splittermond.spellSkillsOption = {
@@ -577,6 +583,18 @@ splittermond.itemSheetProperties.weapon = [
                 template: "input"
             },
             {
+                field: "system.damageType",
+                label: "splittermond.damageType",
+                template: "select",
+                choices: damageTypeOptions
+            },
+            {
+                field: "system.costType",
+                label: "splittermond.damageCategory",
+                template: "select",
+                choices: splittermond.costTypeOptions,
+            },
+            {
                 field: "system.range",
                 label: "splittermond.range",
                 template: "input"
@@ -629,6 +647,18 @@ splittermond.itemSheetProperties.weapon = [
                 field: "system.secondaryAttack.damage",
                 label: "splittermond.damage",
                 template: "input"
+            },
+            {
+                field: "system.secondaryAttack.damageType",
+                label: "splittermond.damageType",
+                template: "select",
+                choices: damageTypeOptions
+            },
+            {
+                field: "system.secondaryAttack.costType",
+                label: "splittermond.damageCategory",
+                template: "select",
+                choices: splittermond.costTypeOptions,
             },
             {
                 field: "system.secondaryAttack.range",
@@ -783,6 +813,18 @@ splittermond.itemSheetProperties.spell = [
                 template: "input"
             },
             {
+                field: "system.damageType",
+                label: "splittermond.damageType",
+                template: "select",
+                choices: {...damageTypeOptions, null: ""}
+            },
+            {
+                field: "system.costType",
+                label: "splittermond.damageCategory",
+                template: "select",
+                choices: {...splittermond.costTypeOptions,null:""},
+            },
+            {
                 field: "system.range",
                 label: "splittermond.range",
                 template: "input"
@@ -911,6 +953,18 @@ splittermond.itemSheetProperties.npcattack = [
                 field: "system.damage",
                 label: "splittermond.damage",
                 template: "input"
+            },
+            {
+                field: "system.damageType",
+                label: "splittermond.damageType",
+                template: "select",
+                choices: damageTypeOptions
+            },
+            {
+                field: "system.costType",
+                label: "splittermond.damageCategory",
+                template: "select",
+                choices: splittermond.costTypeOptions,
             },
             {
                 field: "system.range",

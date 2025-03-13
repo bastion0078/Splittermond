@@ -9,14 +9,10 @@ import type {
     SpellDataModelType,
     SplittermondItemDataModelType
 } from "../../item";
-import {DataModelConstructorInput} from "../../api/DataModel";
+import {PartialItemData} from "./types";
+import {mapNameToSystemFeature} from "./mapNameToSystemFeature";
 
 type NpcCreationData = typeof actorCreator["createNpc"]["arguments"][0];
-type PartialItemData<T extends SplittermondItemDataModelType> = {
-    type: string,
-    name: string,
-    system: Partial<DataModelConstructorInput<T>>
-};
 
 export async function importNpc(rawData: string) {
     let rawString = rawData.replace(/\r|\x02/g, "").replace(/\r\n/g, "\n");
@@ -330,8 +326,9 @@ export async function importNpc(rawData: string) {
                             delete featureData._id;
                             featureData.name = data.name;
                             return featureData
+                        }else {
+                            return mapNameToSystemFeature(data);
                         }
-                        return data;
                     })));
                     break;
                 case /Typus:/.test(tokenizedData[i]):
