@@ -1,16 +1,8 @@
-<<<<<<< Updated upstream
-2025/03/09-11:14:10.913 39e4 Delete type=3 #1
-2025/03/09-14:41:19.198 6cb0 Level-0 table #5: started
-2025/03/09-14:41:19.204 6cb0 Level-0 table #5: 916 bytes OK
-2025/03/09-14:41:19.204 6cb0 Delete type=0 #3
-2025/03/09-14:41:19.205 6cb0 Manual compaction at level-0 from '!macros!6QY9SZClheDNjfwu' @ 72057594037927935 : 1 .. '!macros!zV684bDKDprbrh52' @ 0 : 0; will stop at (end)
-=======
-2025/03/11-08:55:50.830 594 Recovering log #7
-2025/03/11-08:55:50.833 594 Delete type=0 #7
-2025/03/11-08:55:50.833 594 Delete type=3 #6
-2025/03/11-10:18:45.606 53e4 Level-0 table #11: started
-2025/03/11-10:18:45.606 53e4 Level-0 table #11: 0 bytes OK
-2025/03/11-10:18:45.606 53e4 Delete type=0 #9
-2025/03/11-10:18:45.612 53e4 Manual compaction at level-0 from '!macros!6QY9SZClheDNjfwu' @ 72057594037927935 : 1 .. '!macros!zV684bDKDprbrh52' @ 0 : 0; will stop at (end)
-2025/03/11-10:18:45.612 53e4 Manual compaction at level-1 from '!macros!6QY9SZClheDNjfwu' @ 72057594037927935 : 1 .. '!macros!zV684bDKDprbrh52' @ 0 : 0; will stop at (end)
->>>>>>> Stashed changes
+2025/03/13-07:48:16.787 5a8 Recovering log #15
+2025/03/13-07:48:16.789 5a8 Delete type=0 #15
+2025/03/13-07:48:16.789 5a8 Delete type=3 #14
+2025/03/13-09:26:19.507 4474 Level-0 table #19: started
+2025/03/13-09:26:19.507 4474 Level-0 table #19: 0 bytes OK
+2025/03/13-09:26:19.507 4474 Delete type=0 #17
+2025/03/13-09:26:19.508 4474 Manual compaction at level-0 from '!macros!6QY9SZClheDNjfwu' @ 72057594037927935 : 1 .. '!macros!zV684bDKDprbrh52' @ 0 : 0; will stop at (end)
+2025/03/13-09:26:19.508 4474 Manual compaction at level-1 from '!macros!6QY9SZClheDNjfwu' @ 72057594037927935 : 1 .. '!macros!zV684bDKDprbrh52' @ 0 : 0; will stop at (end)
