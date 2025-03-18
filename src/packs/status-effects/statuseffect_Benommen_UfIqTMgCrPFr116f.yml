@@ -1,0 +1,32 @@
+_id: UfIqTMgCrPFr116f
+name: Benommen
+type: statuseffect
+flags: {}
+img: icons/svg/stoned.svg
+effects: []
+_stats:
+  coreVersion: '12.331'
+  systemId: null
+  systemVersion: null
+  createdTime: null
+  modifiedTime: null
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+ownership:
+  default: 0
+  m5HI1NMGmW1y9fyL: 3
+system:
+  description: >-
+    <p>Alle Aktionen sind um einen Tick verlangsamt. Der Zustand endet nach 60
+    Ticks.&nbsp;</p>
+  source: ''
+  modifier: tickMalus.mod +1
+  level: '1'
+  startTick: 0
+  interval: '60'
+  times: '1'
+folder: null
+sort: 0
+_key: '!items!UfIqTMgCrPFr116f'
+

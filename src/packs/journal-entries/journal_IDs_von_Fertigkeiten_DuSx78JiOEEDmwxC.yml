@@ -1,0 +1,551 @@
+_id: DuSx78JiOEEDmwxC
+name: IDs von Fertigkeiten
+folder: null
+sort: 0
+flags:
+  core:
+    sourceId: JournalEntry.U6nKBziUjlIbMg3d
+pages:
+  - name: IDs von Fertigkeiten
+    type: text
+    title:
+      show: false
+      level: 1
+    text:
+      format: 1
+      content: >-
+        <p>Alle allgemeinen Fertigkeiten können über <code>generalskills</code>
+        referenziert werden.</p>
+
+        <p>Alle Kampffertigkeiten können über <code>fightingskills</code>
+        referenziert werden.</p>
+
+        <p>Alle Magieschulen können über <code>magicskills</code> referenziert
+        werden.</p>
+
+        <table style="width:44.2322%;height:448px" border="1">
+
+        <thead>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Allgemeine Fertigkeiten</td>
+
+        <td style="width:38.3211%;height:16px">ID</td>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Akrobatik</td>
+
+        <td style="width:38.3211%;height:16px"><code>acrobatics</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Alchemie</td>
+
+        <td style="width:38.3211%;height:16px"><code>alchemy</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Anführen</td>
+
+        <td style="width:38.3211%;height:16px"><code>leadership</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Arkane Kunde</td>
+
+        <td style="width:38.3211%;height:16px"><code>arcanelore</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Athletik</td>
+
+        <td style="width:38.3211%;height:16px"><code>athletics</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Darbietung</td>
+
+        <td style="width:38.3211%;height:16px"><code>performance</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Diplomatie</td>
+
+        <td style="width:38.3211%;height:16px"><code>diplomacy</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Edelhandwerk</td>
+
+        <td style="width:38.3211%;height:16px"><code>clscraft</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Empathie</td>
+
+        <td style="width:38.3211%;height:16px"><code>empathy</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Entschlossenheit</td>
+
+        <td style="width:38.3211%;height:16px"><code>determination</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Fingerfertigkeit</td>
+
+        <td style="width:38.3211%;height:16px"><code>dexterity</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Geschichten und Mythen</td>
+
+        <td style="width:38.3211%;height:16px"><code>history</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Handwerk</td>
+
+        <td style="width:38.3211%;height:16px"><code>craftmanship</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Heilkunde</td>
+
+        <td style="width:38.3211%;height:16px"><code>heal</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Heimlichkeit</td>
+
+        <td style="width:38.3211%;height:16px"><code>stealth</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Jagdkunst</td>
+
+        <td style="width:38.3211%;height:16px"><code>hunting</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Länderkunde</td>
+
+        <td style="width:38.3211%;height:16px"><code>countrylore</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Naturkunde</td>
+
+        <td style="width:38.3211%;height:16px"><code>nature</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Redegewandtheit</td>
+
+        <td style="width:38.3211%;height:16px"><code>eloquence</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Schlösser und Fallen</td>
+
+        <td style="width:38.3211%;height:16px"><code>locksntraps</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Schwimmen</td>
+
+        <td style="width:38.3211%;height:16px"><code>swim</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Seefahrt</td>
+
+        <td style="width:38.3211%;height:16px"><code>seafaring</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Straßenkunde</td>
+
+        <td style="width:38.3211%;height:16px"><code>streetlore</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Tierführung</td>
+
+        <td style="width:38.3211%;height:16px"><code>animals</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Überleben</td>
+
+        <td style="width:38.3211%;height:16px"><code>survival</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Wahrnehmung</td>
+
+        <td style="width:38.3211%;height:16px"><code>perception</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Zähigkeit</td>
+
+        <td style="width:38.3211%;height:16px">
+
+        <p><code>enduranc</code></p>
+
+        <p><code>e</code></p>
+
+        </td>
+
+        </tr>
+
+        </tbody>
+
+        </table>
+
+        <table style="width:44.2322%;height:122px" border="1">
+
+        <thead>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Kampffertigkeiten</td>
+
+        <td style="width:38.3211%;height:16px">ID</td>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Handgemenge</td>
+
+        <td style="width:38.3211%;height:16px"><code>melee</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Hiebwaffen</td>
+
+        <td style="width:38.3211%;height:16px"><code>slashing</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Kettenwaffen</td>
+
+        <td style="width:38.3211%;height:16px"><code>chains</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Klingenwaffen</td>
+
+        <td style="width:38.3211%;height:16px"><code>blades</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Schusswaffen</td>
+
+        <td style="width:38.3211%;height:16px"><code>longrange</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Stangenwaffen</td>
+
+        <td style="width:38.3211%;height:16px"><code>staffs</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:10px">Wurfwaffen</td>
+
+        <td style="width:38.3211%;height:10px"><code>throwing</code></td>
+
+        </tr>
+
+        </tbody>
+
+        </table>
+
+        <table style="width:44.2322%;height:448px" border="1">
+
+        <thead>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Magieschulen</td>
+
+        <td style="width:38.3211%;height:16px">ID</td>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Bannmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>antimagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Beherrschungsmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>controlmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Bewegungsmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>motionmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Erkenntnismagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>insightmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Felsmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>stonemagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Feuermagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>firemagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Heilungsmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>healmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Illusionsmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>illusionmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Kampfmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>combatmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Lichtmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>lightmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Naturmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>naturemagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Schattenmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>shadowmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Schicksalsmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>fatemagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Schutzmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>protectionmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Stärkungsmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>enhancemagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Todesmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>deathmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Verwandlungsmagie</td>
+
+        <td
+        style="width:38.3211%;height:16px"><code>transformationmagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Wassermagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>watermagic</code></td>
+
+        </tr>
+
+        <tr style="height:16px">
+
+        <td style="width:60.9259%;height:16px">Windmagie</td>
+
+        <td style="width:38.3211%;height:16px"><code>windmagic</code></td>
+
+        </tr>
+
+        </tbody>
+
+        </table>
+    _stats:
+      coreVersion: '12.331'
+      systemId: null
+      systemVersion: null
+      createdTime: null
+      modifiedTime: null
+      lastModifiedBy: null
+      compendiumSource: null
+      duplicateSource: null
+    _id: FaJUSPs8DFhD6jRT
+    system: {}
+    image: {}
+    video:
+      controls: true
+      volume: 0.5
+    src: null
+    sort: 0
+    ownership:
+      default: -1
+    flags: {}
+    _key: '!journal.pages!DuSx78JiOEEDmwxC.FaJUSPs8DFhD6jRT'
+_stats:
+  coreVersion: '12.331'
+  systemId: null
+  systemVersion: null
+  createdTime: null
+  modifiedTime: null
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+ownership:
+  default: 0
+  nTPzNCzfwxAgnkMw: 3
+_key: '!journal!DuSx78JiOEEDmwxC'
+categories: []
+

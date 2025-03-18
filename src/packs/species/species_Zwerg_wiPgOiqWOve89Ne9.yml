@@ -1,0 +1,28 @@
+name: Zwerg
+type: species
+flags: {}
+img: icons/svg/mystery-man.svg
+effects: []
+_id: wiPgOiqWOve89Ne9
+_stats:
+  coreVersion: '12.331'
+  systemId: null
+  systemVersion: null
+  createdTime: null
+  modifiedTime: null
+  lastModifiedBy: null
+  compendiumSource: null
+  duplicateSource: null
+ownership:
+  default: 0
+  m5HI1NMGmW1y9fyL: 3
+system:
+  description: ''
+  source: ''
+  size: '4'
+  attributeMod: KON +1, WIL +1, BEW -1
+  strengths: Giftresistenz, Robust, Orientierungssinn
+folder: null
+sort: 0
+_key: '!items!wiPgOiqWOve89Ne9'
+

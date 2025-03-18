@@ -1,3 +1,4 @@
+## 0.12.13
 ## 0.12.12 HOTFIX##
 ### Fixed
 * Verwundbarkeiten und Resistenzen werden nun korrekt bei der Schadensberechnung berücksichtigt
